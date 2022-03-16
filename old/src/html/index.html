@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS templating</title>
+    <script src="./../js/index.js"></script>
+
+    <style>
+        .a {
+            color: blue;
+        }
+        
+        .b {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body onload="addButton(this, 'creative')">
+    <main class="app" id="app">
+        <button onclick="run(addOne)">
+            Add 1
+        </button>
+        <button onclick="run(subOne)">
+            Sub 1
+        </button>
+        <button id="HERE">Yes</button>
+        <button bind="ss" id="HERE2">Yes <var>aa</var></button>
+        <button bind="ss" id="HERE3">Yes <var>aa</var></button>
+        <input type="number" name="a" id="ss" value="1">
+        <p id="sbs1">Some <var>aa</var></p>
+        <h1 id="sbs2">Hello number <var>??</var></h1>
+    </main>
+    <script>
+        check()
+        const state = {
+            'b': 0,
+        };
+
+        const addOne = {
+            'target': 'ss',
+            'do': (targ) => targ.value++,
+        };
+        const subOne = {
+            'target': 'ss',
+            'do': (targ) => targ.value--,
+        };
+
+        setListeners({
+            'subscribers': ['sbs1', 'sbs2'],
+            'src': 'ss'
+        });
+    </script>
+</body>
+
+</html>
