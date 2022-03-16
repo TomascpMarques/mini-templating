@@ -5,24 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS templating</title>
-    <script src="../dist/index.js"></script>
-
-    <style>
-        .a {
-            color: blue;
-        }
-        
-        .b {
-            font-weight: bold;
-        }
-    </style>
+    <title>Document</title>
+    <script src="./../dist/index.js">
+    </script>
 </head>
 
 <body>
-    <main class="app" id="app">
+    <main id="app" name="application">
+        <button id="bt1" onclick="app.do('addOne')">
+            Add 1
+        </button>
+        <p id="p1" bind="inp1"><var>aa</var></p>
+        <p id="p2" bind="inp1"><var>aa</var></p>
+        <input type="number" name="a" id="inp1" value="1">
     </main>
     <script>
+        const app = new App({
+            entry: "app",
+            appState: {
+                'inp1': document.getElementById('inp1'),
+            },
+            actions: {
+                "addOne": {
+                    "target": "inp1",
+                    "do": (targ) => targ.value++
+                }
+            },
+            debug: true,
+        });
     </script>
 </body>
 
