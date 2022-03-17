@@ -18,9 +18,11 @@
         <p id="p1" @mini-bind="inp1"><var>aa</var></p>
         <p id="p2" @mini-bind="inp1"><var>aa</var></p>
         <input type="number" name="a" id="inp1" @mini-bind="inp1">
+        <mini-basic ptext="Yes baby!"></mini-basic>
+        <p>Lorem ipsum dolor sit amet.</p>
     </main>
     <script>
-        const app = new App({
+        const app = newMini({
             entry: "app",
             appState: {
                 'inp1': 1,
