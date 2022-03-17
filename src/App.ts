@@ -43,6 +43,9 @@ class App implements StateHolder, ValueBinder {
             console.log('App actions:\n');
             console.table(this.actions);
         }
+
+        // DEVELOPING
+        customElements.define('mini-basic', Mini);
     }
 
     public handle = (action: string) => {
