@@ -44,8 +44,10 @@ class App implements StateHolder, ValueBinder {
             console.table(this.actions);
         }
 
-        // DEVELOPING
+        // TESTING mini-basic tag
+        // DEVELOPING Mini custom tags
         customElements.define('mini-basic', Mini);
+        customElements.define('mini-var', MiniTemplate);
     }
 
     public handle = (action: string) => {
