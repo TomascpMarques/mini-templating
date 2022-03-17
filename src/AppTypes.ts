@@ -1,16 +1,3 @@
-/*
-    1. get the element with the bind
-    2. get child <var> element
-    3. update the innerHTML of the <var> element
-
-    1. get number of binds in element
-    2. get number of vars in element
-    3. map each bind to a var by order of occurrence
-
-    1. get elements with value binders
-    2. set a listen for changes of value by a limmiting event
-    3. update state acording to bindings
-*/
 
 /**
  * Holds html element state as a <any> value.

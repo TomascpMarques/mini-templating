@@ -1,8 +1,9 @@
 class App implements StateHolder, ValueBinder {
-    //
+    // Class development and debugging values
     readonly binder_atributte: string = '@mini-bind';
     #debugging: boolean;
 
+    // The value binds are what
     bindings: ValueBindings = {};
     // The state can be accessed by app elements
     // by using the binding atribute in them
