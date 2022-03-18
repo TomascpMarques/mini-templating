@@ -22,7 +22,7 @@ type ValueBindings = {
  */
 type Action = {
     target: string;
-    do: (context?: Object) => void;
+    do: (context?: any) => any;
 };
 
 /**
@@ -68,7 +68,7 @@ interface StateHolder {
      * @return {Error} If can't add the state to the store
      *                 return an error
      */
-    setStateByID: (id: string) => Error | null;
+    setStateByID: (id: string, value: any) => Error | null;
 }
 
 /**

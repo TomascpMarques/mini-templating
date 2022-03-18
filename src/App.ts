@@ -62,22 +62,28 @@ class App implements StateHolder, ValueBinder {
             throw new Error(err_mss);
         }
         /* State initialization is left to the user */
-        let target = document.getElementById(this.actions[action].target);
-        let target_id = (target as HTMLElement).id;
+        let target_id = this.actions[action].target;
+        let target = this.getStateByID(target_id);
+        console.log(`TARGET: ${target_id},\n${target}`)
+        let action_do_result: any;
 
-        if (target !== undefined)
-            this.actions[action].do(target as Object);
+        if (typeof this.getStateByID(target_id) !== 'undefined') {
+            action_do_result = this.actions[action].do(target);
+            console.log("CHANGES: " + this.actions[action].do(target));
+        }
         else {
             throw new Error(`[mini] Error: The given state is not valid: <${target}>`);
         }
 
         // Debug
-        if (this.#debugging)
-            console.log(`Target state changes: <${target}>`);
+        if (this.#debugging) {
+            console.log(`Target: <${target}>`);
+            console.log(`Target state changes: <${action_do_result}>`);
+        }
 
         // Handle valaue/state changes in DOM
+        this.setStateByID(target_id, action_do_result);
         this.updateStateListener(target_id);
-        this.setStateByID(target_id);
 
         if (this.#debugging) {
             console.log('-> App value/state store:\n');
@@ -87,29 +93,27 @@ class App implements StateHolder, ValueBinder {
 
     private updateStateListener = (src_id: string) => {
         if (this.#debugging) {
-            console.log(`Updating state listners for: <${src_id}>`);
+            console.log(`[mini] Updating state listners for: <${src_id}>`);
             console.log(
-                `State listners for: <${this.bindings}>`
+                `[mini] State listners for: <${Object.keys(this.bindings)}>`
             );
         }
 
-        Array.from(this.bindings[src_id]).forEach((listner) => {
-            if (this.#debugging)
-                console.log('state listener: ' + listner);
-            // TESTING ONLY
-            // Already know the element exists, so we can drop the null check
-            let prev = document.getElementById(listner) as HTMLElement;
-            (document.getElementById(listner) as HTMLElement).innerHTML =
-                prev.innerHTML.replace(
-                    /<var>(.+|)<\/var>/gm,
-                    `<var>${this.store[src_id].value || this.store[src_id]}</var>`
-                );
-            if (this.#debugging) {
-                console.log(`The store key for the replace val: ${src_id}`);
-                console.log(
-                    `The value to use in replacement: ${this.store[src_id].value}`
-                );
-            }
+        const listners = Array.from(
+            (document.querySelector('#app') as HTMLElement)
+                .getElementsByTagName('mini-var')
+        ).filter(x => x.getAttribute('@react') === src_id);
+
+        console.log("LISTNERS");
+        console.table(listners);
+
+        listners.forEach(e => {
+            console.log("-aaa: ", e);
+            console.log("-------------");
+            console.log("Actual State: ", this.getStateByID(src_id));
+            console.log("-------------");
+            (e as MiniTemplate).updateInnerValue(this.getStateByID(src_id))
+            console.log("-------------");
         });
 
         // document.getElementById(src_id)?.addEventListener('input', () => {
@@ -155,14 +159,14 @@ class App implements StateHolder, ValueBinder {
             }
 
             filteredValues.forEach(value => {
-                let templateDefined = `<${template} id="@${value}" @value="${this.getStateByID(value)}"></${template}>`;
+                let templateDefined = `<${template} @react="${value}" @value="${this.getStateByID(value)}"></${template}>`;
                 binded.innerHTML = binded.innerHTML
                     .replace(
                         /{{@\w+}}/gm,
                         templateDefined
                     );
 
-                this.addValueBind(value, '@' + value)
+                this.addValueBind(value, `@${value}`)
                 if (this.#debugging) {
                     console.log(`[mini] Generated a <mini-var>: "${templateDefined}"`)
                 }
@@ -197,16 +201,17 @@ class App implements StateHolder, ValueBinder {
         return this.store[id];
     };
 
-    public setStateByID = (id: string) => {
-        if (document.getElementById(id) === null) {
-            let err_mss = `[mini] Error: The given element <${id}> does not exist`;
-            throw new Error(err_mss);
-        }
+    public setStateByID = (id: string, value: any) => {
+        // if (document.getElementById(id) === null) {
+        //     let err_mss = `[mini] Error: The given element <${id}> does not exist`;
+        //     throw new Error(err_mss);
+        // }
 
         if (this.#debugging)
             console.log(`[mini-debug] Setting state of: <${id}>`);
 
-        this.store[id] = document.getElementById(id) as HTMLElement;
+        this.store[id] = value;
+        console.log(`State: ${id}\nValue: ${value}`)
         return null;
     };
 }

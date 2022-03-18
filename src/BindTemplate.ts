@@ -57,6 +57,13 @@ class MiniTemplate extends HTMLElement {
         wrapper.textContent = variableValue || defaultVariableContent
         shadowRoot.appendChild(wrapper);
     }
+
+    public updateInnerValue = (new_value: any) => {
+        this.shadowRoot?.replaceChild(
+            document.createTextNode(new_value),
+            (this.shadowRoot?.firstChild as Node)
+        )
+    }
 }
 
 class Mini extends HTMLElement {
