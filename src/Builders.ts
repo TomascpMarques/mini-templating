@@ -3,6 +3,6 @@
  * @param {ApplicationSetupConfigs} configs _mini_ application setup configuration
  * @returns {App} A new mini app **ready to use**
  */
-const newMini = (configs: ApplicationSetupConfigs) => {
+const newMini = (configs: ApplicationSetupConfigs): App => {
     return new App(configs);
 };
