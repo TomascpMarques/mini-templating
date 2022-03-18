@@ -12,6 +12,8 @@
 8. set a listen for changes of value by a limmiting event
 9. update state acording to bindings
 
+## TODO 
+
 <br>
 
 # Development:
