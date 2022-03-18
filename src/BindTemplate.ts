@@ -33,20 +33,29 @@ class MiniTemplate extends HTMLElement {
         let shadowRoot = this.attachShadow({ mode: 'open' });
 
         let wrapper = document.createElement('div');
+        // denomination is set up for usage by others
+        // shadowRoot mode open allows for exactly that
+        // though, the responsibility of changing this
+        // inner value should only fall on this element/class
         wrapper.setAttribute('denomination', 'main')
 
-        let variableContent: string;
-        if (typeof this.getAttribute('ptext') === 'string') {
-            variableContent = this.getAttribute('ptext') as string;
+        // Defenition of the default value for the template
+        let defaultVariableContent: string;
+        if (typeof this.getAttribute('@default') === 'string') {
+            defaultVariableContent = this.getAttribute('@default') as string;
         } else {
-            variableContent = "[mini] Attention: No value was given";
+            defaultVariableContent = "";
         }
 
-        let p = document.createElement('p');
-        p.innerText = variableContent;
+        // Defenition of the given value for the template
+        let variableValue: string | undefined
+        if (typeof this.getAttribute('@value') === 'string') {
+            variableValue = this.getAttribute('@value') as string;
+        }
 
+        // Add the elements to shadow root
+        wrapper.textContent = variableValue || defaultVariableContent
         shadowRoot.appendChild(wrapper);
-        wrapper.appendChild(p);
     }
 }
 
