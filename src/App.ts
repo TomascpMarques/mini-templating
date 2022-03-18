@@ -17,18 +17,21 @@ class App implements StateHolder, ValueBinder {
         this.#debugging = config.debug;
 
         let temp: string | undefined = document.getElementById(config.entry)?.id;
-        if (this.#debugging)
-            console.log(`Temp check: <${temp}>`);
 
         if (typeof temp !== "string") {
             throw new Error(
-                '[mini] Error: The application entry point (html element id) is not valid'
+                '[mini-debug] Error: The application entry point (html element id) is not valid'
             );
         }
 
         this.app_entry = temp as string;
         if (this.#debugging)
-            console.log(`New app entry point: <${this.app_entry}>`);
+            customMessage(
+                'mini-debug',
+                {
+                    'New app entry point': this.app_entry
+                }
+            )
 
         // TESTING mini-basic tag
         // DEVELOPING Mini custom tags
@@ -46,39 +49,44 @@ class App implements StateHolder, ValueBinder {
         this.setupBindedValues();
 
         if (this.#debugging) {
-            console.log('App value bindings:\n');
-            console.table(this.bindings);
-            console.log('App value/state store:\n');
-            console.table(this.store);
-            console.log('App actions:\n');
-            console.table(this.actions);
+            customMessage(
+                'mini-debug',
+                {
+                    'App value bindings': JSON.stringify(this.bindings),
+                    'App value/state store': JSON.stringify(this.store),
+                    'App actions': JSON.stringify(this.actions),
+                }
+            )
         }
 
     }
 
     public handle = (action: string) => {
         if (!this.actions[action]) {
-            let err_mss = `[mini] Error: The given action <${action}> is not registered`;
+            let err_mss = `[mini-debug] Error: The given action <${action}> is not registered`;
             throw new Error(err_mss);
         }
         /* State initialization is left to the user */
         let target_id = this.actions[action].target;
         let target = this.getStateByID(target_id);
-        console.log(`TARGET: ${target_id},\n${target}`)
         let action_do_result: any;
 
         if (typeof this.getStateByID(target_id) !== 'undefined') {
             action_do_result = this.actions[action].do(target);
-            console.log("CHANGES: " + this.actions[action].do(target));
         }
         else {
-            throw new Error(`[mini] Error: The given state is not valid: <${target}>`);
+            throw new Error(`[mini-debug] Error: The given state is not valid: <${target}>`);
         }
 
         // Debug
         if (this.#debugging) {
-            console.log(`Target: <${target}>`);
-            console.log(`Target state changes: <${action_do_result}>`);
+            customMessage(
+                'mini-debug',
+                {
+                    'Handle Target': target_id,
+                    'Target state changes': action_do_result
+                }
+            );
         }
 
         // Handle valaue/state changes in DOM
@@ -86,17 +94,21 @@ class App implements StateHolder, ValueBinder {
         this.updateStateListener(target_id);
 
         if (this.#debugging) {
-            console.log('-> App value/state store:\n');
+
+            console.log('[mini-debug] App value/state store:\n');
             console.table(this.store);
         }
     };
 
     private updateStateListener = (src_id: string) => {
         if (this.#debugging) {
-            console.log(`[mini] Updating state listners for: <${src_id}>`);
-            console.log(
-                `[mini] State listners for: <${Object.keys(this.bindings)}>`
-            );
+            customMessage(
+                'mini-debug',
+                {
+                    'Updating state listners for': src_id,
+                    'State listners for': Object.keys(this.bindings)
+                }
+            )
         }
 
         const listners = Array.from(
@@ -104,17 +116,10 @@ class App implements StateHolder, ValueBinder {
                 .getElementsByTagName('mini-var')
         ).filter(x => x.getAttribute('@react') === src_id);
 
-        console.log("LISTNERS");
-        console.table(listners);
-
-        listners.forEach(e => {
-            console.log("-aaa: ", e);
-            console.log("-------------");
-            console.log("Actual State: ", this.getStateByID(src_id));
-            console.log("-------------");
-            (e as MiniTemplate).updateInnerValue(this.getStateByID(src_id))
-            console.log("-------------");
-        });
+        listners.forEach(e =>
+            (e as MiniTemplate)
+                .updateInnerValue(this.getStateByID(src_id))
+        );
 
         // document.getElementById(src_id)?.addEventListener('input', () => {
         //     setTimeout(() => {
@@ -132,7 +137,12 @@ class App implements StateHolder, ValueBinder {
      */
     private setupBindedValues = () => {
         if (this.#debugging)
-            console.log(`The app entry point is: <${this.app_entry}>`);
+            customMessage(
+                'mini-debug',
+                {
+                    'App entry point is': this.app_entry
+                }
+            );
 
         // Get all the values that specefie a binding
         let bindedElements = Array.from(
@@ -154,7 +164,12 @@ class App implements StateHolder, ValueBinder {
 
             const filteredValues = bindedValues?.map(x => x.slice(3, -2)).filter(x => x.match(/^\w+$/gm)) as string[];
             if (this.#debugging) {
-                console.log("[mini] The binded values table: ");
+                customMessage(
+                    'mini-debug',
+                    {
+                        'Message': 'The binded values table'
+                    }
+                )
                 console.table(filteredValues);
             }
 
@@ -168,7 +183,12 @@ class App implements StateHolder, ValueBinder {
 
                 this.addValueBind(value, `@${value}`)
                 if (this.#debugging) {
-                    console.log(`[mini] Generated a <mini-var>: "${templateDefined}"`)
+                    customMessage(
+                        'mini-debug',
+                        {
+                            'Generated a <mini-var>': templateDefined,
+                        }
+                    );
                 }
             });
 
@@ -187,9 +207,8 @@ class App implements StateHolder, ValueBinder {
         binded_ids.forEach((id) => this.bindings[src_id].add(id));
 
         binded_ids.forEach((id) => {
-            let err_mss = `[mini] Error: The new bindings <${binded_ids.join(
-                ' + '
-            )}> were not added`;
+            let err_mss =
+                `[mini-debug] Error: The new bindings <${binded_ids.join(' + ')}> were not added`;
             if (!this.bindings[src_id].has(id))
                 new Error(err_mss);
         });
@@ -203,15 +222,27 @@ class App implements StateHolder, ValueBinder {
 
     public setStateByID = (id: string, value: any) => {
         // if (document.getElementById(id) === null) {
-        //     let err_mss = `[mini] Error: The given element <${id}> does not exist`;
+        //     let err_mss = `[mini-debug] Error: The given element <${id}> does not exist`;
         //     throw new Error(err_mss);
         // }
 
-        if (this.#debugging)
-            console.log(`[mini-debug] Setting state of: <${id}>`);
+        if (this.#debugging) {
+            customMessage(
+                'mini-debug',
+                {
+                    'Setting state of': id,
+                }
+            );
+            customMessage(
+                'mini-debug',
+                {
+                    'State': id,
+                    'Value': value,
+                }
+            );
+        }
 
         this.store[id] = value;
-        console.log(`State: ${id}\nValue: ${value}`)
         return null;
     };
 }
