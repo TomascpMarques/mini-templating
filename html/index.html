@@ -20,9 +20,7 @@
         <mini-basic ptext="Yes baby!"></mini-basic>
         <div>
             <p>Lorem ipsum dolor sit amet.</p>
-            <p @bind>Some Stuff: {{@inp1}}</p>
-
-            <mini-var @default="Some Here 1111"></mini-var>
+            <p @bind>Shoul also update: {{@inp1}}</p>
 
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
@@ -31,7 +29,7 @@
         const app = newMini({
             entry: "app",
             appState: {
-                'inp1': 1,
+                'inp1': 32,
             },
             actions: {
                 "addOne": {

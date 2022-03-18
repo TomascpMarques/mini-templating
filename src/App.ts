@@ -41,9 +41,9 @@ class App implements StateHolder, ValueBinder {
 
         // Set up of the app entry point
         // Value and state storage
-        this.setupBindedValues();
         this.store = config.appState;
         this.actions = config.actions;
+        this.setupBindedValues();
 
         if (this.#debugging) {
             console.log('App value bindings:\n');
@@ -86,8 +86,12 @@ class App implements StateHolder, ValueBinder {
     };
 
     private updateStateListener = (src_id: string) => {
-        if (this.#debugging)
+        if (this.#debugging) {
             console.log(`Updating state listners for: <${src_id}>`);
+            console.log(
+                `State listners for: <${this.bindings}>`
+            );
+        }
 
         Array.from(this.bindings[src_id]).forEach((listner) => {
             if (this.#debugging)
@@ -151,13 +155,14 @@ class App implements StateHolder, ValueBinder {
             }
 
             filteredValues.forEach(value => {
-                let templateDefined = `<${template} @value="${value}"></${template}>`;
+                let templateDefined = `<${template} id="@${value}" @value="${this.getStateByID(value)}"></${template}>`;
                 binded.innerHTML = binded.innerHTML
                     .replace(
                         /{{@\w+}}/gm,
                         templateDefined
                     );
 
+                this.addValueBind(value, '@' + value)
                 if (this.#debugging) {
                     console.log(`[mini] Generated a <mini-var>: "${templateDefined}"`)
                 }
