@@ -1,7 +1,8 @@
 class App implements StateHolder, ValueBinder {
     // Class development and debugging values
-    readonly binder_atributte: string = '@mini-bind';
-    #debugging: boolean;
+    readonly binderAtributte: string = '@bind';
+    readonly #debugging: boolean;
+    #customTags: { [key: string]: string } = {};
 
     // The value binds are what
     bindings: ValueBindings = {};
@@ -29,6 +30,15 @@ class App implements StateHolder, ValueBinder {
         if (this.#debugging)
             console.log(`New app entry point: <${this.app_entry}>`);
 
+        // TESTING mini-basic tag
+        // DEVELOPING Mini custom tags
+        customElements.define('mini-basic', Mini);
+        customElements.define('mini-var', MiniTemplate);
+        this.#customTags = {
+            'basic': 'mini-basic',
+            'template': 'mini-var',
+        };
+
         // Set up of the app entry point
         // Value and state storage
         this.setupBindedValues();
@@ -44,10 +54,6 @@ class App implements StateHolder, ValueBinder {
             console.table(this.actions);
         }
 
-        // TESTING mini-basic tag
-        // DEVELOPING Mini custom tags
-        customElements.define('mini-basic', Mini);
-        customElements.define('mini-var', MiniTemplate);
     }
 
     public handle = (action: string) => {
@@ -120,30 +126,44 @@ class App implements StateHolder, ValueBinder {
         if (this.#debugging)
             console.log(`The app entry point is: <${this.app_entry}>`);
 
-        Array.from((document.getElementById(this.app_entry) as HTMLElement).children).map(
-            (entry) => {
-                let binded = entry.getAttribute(this.binder_atributte);
-                if (this.#debugging)
-                    console.log(entry);
-                if (this.#debugging)
-                    console.log('binded _> ' + binded);
-
-                // Check if the current children has a value binding
-                if (binded) {
-                    // Check if the binding value is already stored
-                    if (this.getBindedValues(binded) !== null) {
-                        // Adds the new binded item to the current value
-                        if (this.#debugging)
-                            console.log('entry id _> ' + entry.id);
-                        this.addValueBind(binded, entry.id);
-                        return;
-                    }
-                    // If no existing binding, create and add the value in the
-                    // store
-                    this.addValueBind(binded, entry.id);
-                }
-            }
+        // Get all the values that specefie a binding
+        let bindedElements = Array.from(
+            (document.querySelector('#app') as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            element => element.hasAttribute(this.binderAtributte)
         );
+
+        // Changin the template text for the proper mini-<tag>
+        bindedElements.forEach(binded => {
+            const template = this.#customTags['template'];
+
+            const bindedValues = (binded.textContent as string).match(/{{@\w+}}/gm);
+            if (typeof bindedValues === 'undefined') {
+                // Skip execution
+                return;
+            }
+
+            const filteredValues = bindedValues?.map(x => x.slice(3, -2)).filter(x => x.match(/^\w+$/gm)) as string[];
+            if (this.#debugging) {
+                console.log("[mini] The binded values table: ");
+                console.table(filteredValues);
+            }
+
+            filteredValues.forEach(value => {
+                let templateDefined = `<${template} @value="${value}"></${template}>`;
+                binded.innerHTML = binded.innerHTML
+                    .replace(
+                        /{{@\w+}}/gm,
+                        templateDefined
+                    );
+
+                if (this.#debugging) {
+                    console.log(`[mini] Generated a <mini-var>: "${templateDefined}"`)
+                }
+            });
+
+        });
     };
 
     // =================================================================
