@@ -276,13 +276,13 @@ class App implements StateHolder, ValueBinder {
                         }
                     );
                 }
-                const currentValueExpression = new RegExp(
+                const currentValueTemplateExp = new RegExp(
                     `\{\{\@${value}\}\}`,
                     'gm'
                 );
                 binded.innerHTML = binded.innerHTML
                     .replace(
-                        currentValueExpression,
+                        currentValueTemplateExp,
                         templateDefined
                     );
 

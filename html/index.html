@@ -15,14 +15,23 @@
         <button id="bt1" onclick="app.handle('addOne')">
             Add 1
         </button>
+        <button id="bt2" onclick="app.handle('spaceOutLetters')">
+            Change text
+        </button>
+        <button id="bt3" onclick="app.handle('2x')">
+            Multiply by 2
+        </button>
+        <button id="bt4" onclick="app.handle('docWrite')">
+            Write in doc
+        </button>
         <p id="p1" @bind>Here {{@state1}}</p>
         <!--
             This technique will proably work with all input types
             as long the binded state is appropriate to the input type.
          -->
-        <input type="number" name="a" id="inp1" @value="{{state1}}">
+        <input type="number" name="a" id="inp1" @value="{{state2}">
         <!-- TODO: Text areas need a diferent way of tempating -->
-        <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state1}}">
+        <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state3}}">
         </textarea>
         <!--
             1. get all @text atributted elements
@@ -39,10 +48,10 @@
         </ul>
         <input type="text" name="yes" id="aaaa" @value="{{state1}}">
         <mini-basic ptext="Yes baby!"></mini-basic>
-        <p @bind>Should update: {{@state1}} Lorem, ipsum dolor.</p>
+        <p @bind>Should update: {{@state2}} Lorem, ipsum dolor.</p>
         <div>
             <p>Lorem ipsum dolor sit amet.</p>
-            <p @bind>Shoul also update: {{@state1}}</p>
+            <p @bind>Shoul also update: {{@state3}}</p>
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
     </main>
@@ -55,14 +64,34 @@
                 state3: "Hello",
             },
             actions: {
+                "docWrite": {
+                    "target": "state1",
+                    do: (d) => {
+                        console.log('Here')
+                        return d;
+                    }
+                },
                 "addOne": {
                     target: "state1",
                     do: (targ) => {
                         return ++targ;
                     }
+                },
+                "2x": {
+                    target: "state2",
+                    do: (targ) => {
+                        return targ *= 2;
+                    },
+                },
+                "spaceOutLetters": {
+                    target: "state3",
+                    do: (targ) => {
+                        targ = targ.split('').join(' ');
+                        return targ;
+                    },
                 }
             },
-            debug: true,
+            debug: false,
         });
     </script>
 </body>
