@@ -175,7 +175,7 @@ class App implements StateHolder, ValueBinder {
 
         // Get all the values that specefie a binding
         let bindedElements = Array.from(
-            (document.querySelector('#app') as HTMLElement)
+            (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
             element => element.hasAttribute(this.binderAtributte)
@@ -222,6 +222,28 @@ class App implements StateHolder, ValueBinder {
             });
 
         });
+
+        // Add Value bindings for regular HTML Elements
+        const regularTagListners = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            x => x.getAttribute('@value')?.match(/\{\{\w+\}\}/gm)
+                && x.tagName.toLowerCase() !== 'mini-var'
+        );
+
+        regularTagListners.forEach(element =>
+            this.addValueBind(element.id)
+        );
+
+        if (this.#debugging) {
+            miniCustomMessage(
+                'mini-debug',
+                {
+                    '-> Value Bindings': JSON.stringify(this.bindings),
+                }
+            )
+        };
     };
 
     // =================================================================
@@ -232,6 +254,7 @@ class App implements StateHolder, ValueBinder {
     public addValueBind = (src_id: string, ...binded_ids: string[]) => {
         if (!this.bindings[src_id])
             this.bindings[src_id] = new Set<any>();
+
 
         binded_ids.forEach((id) => this.bindings[src_id].add(id));
 

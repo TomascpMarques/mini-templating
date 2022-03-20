@@ -15,7 +15,7 @@
         <button id="bt1" onclick="app.handle('addOne')">
             Add 1
         </button>
-        <p id="p1" @bind="inp1">Here {{@state1}}</p>
+        <p id="p1" @bind>Here {{@state1}}</p>
         <input type="number" name="a" id="inp1" @value="{{state1}}">
         <mini-basic ptext="Yes baby!"></mini-basic>
         <p @bind>Should update: {{@state1}} Lorem, ipsum dolor.</p>
