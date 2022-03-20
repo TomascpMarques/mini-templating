@@ -173,6 +173,22 @@ class App implements StateHolder, ValueBinder {
                 }
             );
 
+        // Document body std HTML elements value binding attribute value
+        // set from state
+        let stdHTMLBindedValues = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            elem => elem.hasAttribute('@value')
+        );
+
+        stdHTMLBindedValues.forEach(e => {
+            e.setAttribute('value', this.getStateByID(
+                (e.getAttribute('@value') as string)
+                    .slice(2, -2).toString()
+            ))
+        });
+
         // Get all the values that specefie a binding
         let bindedElements = Array.from(
             (document.getElementById(this.app_entry) as HTMLElement)
@@ -223,27 +239,6 @@ class App implements StateHolder, ValueBinder {
 
         });
 
-        // Add Value bindings for regular HTML Elements
-        const regularTagListners = Array.from(
-            (document.getElementById(this.app_entry) as HTMLElement)
-                .getElementsByTagName('*')
-        ).filter(
-            x => x.getAttribute('@value')?.match(/\{\{\w+\}\}/gm)
-                && x.tagName.toLowerCase() !== 'mini-var'
-        );
-
-        regularTagListners.forEach(element =>
-            this.addValueBind(element.id)
-        );
-
-        if (this.#debugging) {
-            miniCustomMessage(
-                'mini-debug',
-                {
-                    '-> Value Bindings': JSON.stringify(this.bindings),
-                }
-            )
-        };
     };
 
     // =================================================================

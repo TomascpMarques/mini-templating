@@ -17,6 +17,10 @@
         </button>
         <p id="p1" @bind>Here {{@state1}}</p>
         <input type="number" name="a" id="inp1" @value="{{state1}}">
+        <!-- TODO: Text areas need a diferent way of tempating -->
+        <textarea name="yes" id="txt1" cols="30" rows="10" @bind>
+            {{@state1}}
+        </textarea>
         <mini-basic ptext="Yes baby!"></mini-basic>
         <p @bind>Should update: {{@state1}} Lorem, ipsum dolor.</p>
         <div>
