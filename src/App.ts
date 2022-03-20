@@ -104,6 +104,34 @@ class App implements StateHolder, ValueBinder {
         }
     };
 
+    private valueUpdateStdHTMLElements = (src_id: string) => {
+        const regularTagListners = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            x => x.getAttribute('@value') === `{{${src_id}}}`
+                && x.tagName.toLowerCase() !== 'mini-var'
+        );
+
+        regularTagListners.forEach(element => {
+            switch (element.tagName.toLowerCase()) {
+                case 'textarea': {
+                    (element as HTMLTextAreaElement).value =
+                        this.getStateByID(src_id);
+                    break;
+                };
+                default: {
+                    element.setAttribute(
+                        'value',
+                        this.getStateByID(src_id)
+                    )
+                    break;
+                }
+            };
+        }
+        );
+    };
+
     private updateStateListener = (src_id: string) => {
         if (this.#debugging) {
             miniCustomMessage(
@@ -134,20 +162,7 @@ class App implements StateHolder, ValueBinder {
         // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
         // Update regular HTML elements state binded values + + +
-        const regularTagListners = Array.from(
-            (document.getElementById(this.app_entry) as HTMLElement)
-                .getElementsByTagName('*')
-        ).filter(
-            x => x.getAttribute('@value') === `{{${src_id}}}`
-                && x.tagName.toLowerCase() !== 'mini-var'
-        );
-
-        regularTagListners.forEach(element =>
-            element.setAttribute(
-                'value',
-                this.getStateByID(src_id)
-            )
-        );
+        this.valueUpdateStdHTMLElements(src_id);
         // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
         // document.getElementById(src_id)?.addEventListener('input', () => {
@@ -158,6 +173,44 @@ class App implements StateHolder, ValueBinder {
         //     }, 400);
         // });
     };
+
+    private valueBindingsForStdHTMLElements = () => {
+        // Document body std HTML elements value binding attribute value
+        // set from state
+        let stdHTMLBindedValues = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            elem => elem.hasAttribute('@value')
+        );
+
+        stdHTMLBindedValues.forEach(e => {
+            miniCustomMessage(
+                'mini-debug',
+                {
+                    'stdHTMLElement tag type': e.tagName,
+                },
+            );
+
+            const valueBinding =
+                (e.getAttribute('@value') as string)
+                    .slice(2, -2).toString();
+            switch (e.tagName.toLowerCase()) {
+                case 'textarea': {
+                    (e as HTMLTextAreaElement).value =
+                        this.getStateByID(valueBinding);
+                    break;
+                }
+                default:
+                    e.setAttribute('value', this.getStateByID(
+                        (e.getAttribute('@value') as string)
+                            .slice(2, -2).toString()
+                    ))
+                    break;
+            };
+
+        });
+    }
 
     /**
      * The function will setup the applications value bindings
@@ -173,21 +226,9 @@ class App implements StateHolder, ValueBinder {
                 }
             );
 
-        // Document body std HTML elements value binding attribute value
-        // set from state
-        let stdHTMLBindedValues = Array.from(
-            (document.getElementById(this.app_entry) as HTMLElement)
-                .getElementsByTagName('*')
-        ).filter(
-            elem => elem.hasAttribute('@value')
-        );
-
-        stdHTMLBindedValues.forEach(e => {
-            e.setAttribute('value', this.getStateByID(
-                (e.getAttribute('@value') as string)
-                    .slice(2, -2).toString()
-            ))
-        });
+        // Document body std HTML elements value binding
+        // attribute value set from state
+        this.valueBindingsForStdHTMLElements();
 
         // Get all the values that specefie a binding
         let bindedElements = Array.from(
