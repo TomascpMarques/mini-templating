@@ -32,12 +32,7 @@ class MiniTemplate extends HTMLElement {
 
         let shadowRoot = this.attachShadow({ mode: 'open' });
 
-        let wrapper = document.createElement('div');
-        // denomination is set up for usage by others
-        // shadowRoot mode open allows for exactly that
-        // though, the responsibility of changing this
-        // inner value should only fall on this element/class
-        wrapper.setAttribute('denomination', 'main')
+        let wrapper = document.createTextNode("");
 
         // Defenition of the default value for the template
         let defaultVariableContent: string;
