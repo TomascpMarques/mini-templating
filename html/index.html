@@ -15,13 +15,13 @@
         <button id="bt1" onclick="app.handle('addOne')">
             Add 1
         </button>
-        <p id="p1" @mini-bind="inp1"><var>aa</var></p>
-        <!-- <input type="number" name="a" id="inp1" value="3"> -->
+        <p id="p1" @bind="inp1">Here {{@state1}}</p>
+        <input type="number" name="a" id="inp1" @value="{{state1}}">
         <mini-basic ptext="Yes baby!"></mini-basic>
-        <p @bind>Should update: {{@inp1}} Lorem, ipsum dolor.</p>
+        <p @bind>Should update: {{@state1}} Lorem, ipsum dolor.</p>
         <div>
             <p>Lorem ipsum dolor sit amet.</p>
-            <p @bind>Shoul also update: {{@inp1}}</p>
+            <p @bind>Shoul also update: {{@state1}}</p>
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
     </main>
@@ -29,11 +29,11 @@
         const app = newMini({
             entry: "app",
             appState: {
-                'inp1': 1,
+                'state1': 1,
             },
             actions: {
                 "addOne": {
-                    "target": "inp1",
+                    "target": "state1",
                     "do": (targ) => {
                         ++targ;
                         targ = Math.pow(targ, 2);

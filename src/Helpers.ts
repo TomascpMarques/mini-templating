@@ -1,8 +1,4 @@
-/**
- * console.log(`%c[mini-debug]%c \n----------\nState: ${id}\nValue: ${value}`, 'color: orange')
- */
-
-const customMessage = (title: string, values: { [key: string]: any }) => {
+const miniCustomMessage = (title: string, values: { [key: string]: any }) => {
     let mssTitle = `%c[${title}]%c\n`;
     let mssTitleBorder = `${'-'.repeat(title.length)} `;
     let valuesFmt = "";

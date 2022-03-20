@@ -26,7 +26,7 @@ class App implements StateHolder, ValueBinder {
 
         this.app_entry = temp as string;
         if (this.#debugging)
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'New app entry point': this.app_entry
@@ -49,7 +49,7 @@ class App implements StateHolder, ValueBinder {
         this.setupBindedValues();
 
         if (this.#debugging) {
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'App value bindings': JSON.stringify(this.bindings),
@@ -61,6 +61,10 @@ class App implements StateHolder, ValueBinder {
 
     }
 
+    /**
+     * Runs an action against a target
+     * @param {string} action Action to run name
+     */
     public handle = (action: string) => {
         if (!this.actions[action]) {
             let err_mss = `[mini-debug] Error: The given action <${action}> is not registered`;
@@ -80,7 +84,7 @@ class App implements StateHolder, ValueBinder {
 
         // Debug
         if (this.#debugging) {
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'Handle Target': target_id,
@@ -102,7 +106,13 @@ class App implements StateHolder, ValueBinder {
 
     private updateStateListener = (src_id: string) => {
         if (this.#debugging) {
-            customMessage(
+            miniCustomMessage(
+                'mini-debug',
+                {
+                    'The app_entry poins is ': this.app_entry
+                }
+            )
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'Updating state listners for': src_id,
@@ -111,8 +121,9 @@ class App implements StateHolder, ValueBinder {
             )
         }
 
+        // Update template values + + + + + + + + + + + + + + + + +
         const listners = Array.from(
-            (document.querySelector('#app') as HTMLElement)
+            (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('mini-var')
         ).filter(x => x.getAttribute('@react') === src_id);
 
@@ -120,6 +131,24 @@ class App implements StateHolder, ValueBinder {
             (e as MiniTemplate)
                 .updateInnerValue(this.getStateByID(src_id))
         );
+        // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+        // Update regular HTML elements state binded values + + +
+        const regularTagListners = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(
+            x => x.getAttribute('@value') === `{{${src_id}}}`
+                && x.tagName.toLowerCase() !== 'mini-var'
+        );
+
+        regularTagListners.forEach(element =>
+            element.setAttribute(
+                'value',
+                this.getStateByID(src_id)
+            )
+        );
+        // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
         // document.getElementById(src_id)?.addEventListener('input', () => {
         //     setTimeout(() => {
@@ -137,7 +166,7 @@ class App implements StateHolder, ValueBinder {
      */
     private setupBindedValues = () => {
         if (this.#debugging)
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'App entry point is': this.app_entry
@@ -164,7 +193,7 @@ class App implements StateHolder, ValueBinder {
 
             const filteredValues = bindedValues?.map(x => x.slice(3, -2)).filter(x => x.match(/^\w+$/gm)) as string[];
             if (this.#debugging) {
-                customMessage(
+                miniCustomMessage(
                     'mini-debug',
                     {
                         'Message': 'The binded values table'
@@ -183,7 +212,7 @@ class App implements StateHolder, ValueBinder {
 
                 this.addValueBind(value, `@${value}`)
                 if (this.#debugging) {
-                    customMessage(
+                    miniCustomMessage(
                         'mini-debug',
                         {
                             'Generated a <mini-var>': templateDefined,
@@ -227,13 +256,13 @@ class App implements StateHolder, ValueBinder {
         // }
 
         if (this.#debugging) {
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'Setting state of': id,
                 }
             );
-            customMessage(
+            miniCustomMessage(
                 'mini-debug',
                 {
                     'State': id,
