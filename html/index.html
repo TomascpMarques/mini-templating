@@ -24,6 +24,14 @@
         <!-- TODO: Text areas need a diferent way of tempating -->
         <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state1}}">
         </textarea>
+        <!--
+            1. get all @text atributted elements
+            2. filter for the template areas
+            3. store the element and template areas position
+            4. update the template with the value.
+            (5). to keep updatin the value, refer to the previous stored value
+         -->
+        <textarea name="yes2" id="rows" cols="30" rows="10" @text>Some stuff here {{#state1#}}</textarea>
         <ul @bind>
             <li>{{@state1}}</li>
             <li>{{@state1}}</li>
