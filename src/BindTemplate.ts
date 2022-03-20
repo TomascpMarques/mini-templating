@@ -4,10 +4,10 @@
  * and definitions of default values.
  */
 
-/*
-Array.from(document.querySelector('#app').getElementsByTagName('*')).filter(x => x.hasAttribute('@bind'))[0]
-*/
-
+/**
+ * Allows the templating system to
+ * esealy update values, in the DOM
+ */
 class MiniTemplate extends HTMLElement {
     constructor() {
         super();
@@ -31,8 +31,8 @@ class MiniTemplate extends HTMLElement {
         */
 
         let shadowRoot = this.attachShadow({ mode: 'open' });
-
-        let wrapper = document.createTextNode("");
+        // Template's content
+        let innerContent = document.createTextNode("");
 
         // Defenition of the default value for the template
         let defaultVariableContent: string;
@@ -49,10 +49,15 @@ class MiniTemplate extends HTMLElement {
         }
 
         // Add the elements to shadow root
-        wrapper.textContent = variableValue || defaultVariableContent
-        shadowRoot.appendChild(wrapper);
+        innerContent.textContent = variableValue || defaultVariableContent
+        shadowRoot.appendChild(innerContent);
     }
 
+    /**
+     * Allows the template to change it's inner value
+     * to a new specefied one
+     * @param {any} new_value The new value to insert in the template
+     */
     public updateInnerValue = (new_value: any) => {
         this.shadowRoot?.replaceChild(
             document.createTextNode(new_value),
