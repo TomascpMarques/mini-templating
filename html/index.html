@@ -16,11 +16,20 @@
             Add 1
         </button>
         <p id="p1" @bind>Here {{@state1}}</p>
+        <!--
+            This technique will proably work with all input types
+            as long the binded state is appropriate to the input type.
+         -->
         <input type="number" name="a" id="inp1" @value="{{state1}}">
         <!-- TODO: Text areas need a diferent way of tempating -->
-        <textarea name="yes" id="txt1" cols="30" rows="10" @bind>
-            {{@state1}}
+        <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state1}}">
         </textarea>
+        <ul @bind>
+            <li>{{@state1}}</li>
+            <li>{{@state1}}</li>
+            <li>{{@state1}}</li>
+        </ul>
+        <input type="text" name="yes" id="aaaa" @value="{{state1}}">
         <mini-basic ptext="Yes baby!"></mini-basic>
         <p @bind>Should update: {{@state1}} Lorem, ipsum dolor.</p>
         <div>
@@ -33,15 +42,13 @@
         const app = newMini({
             entry: "app",
             appState: {
-                'state1': 1,
+                state1: 1,
             },
             actions: {
                 "addOne": {
-                    "target": "state1",
-                    "do": (targ) => {
-                        ++targ;
-                        targ = Math.pow(targ, 2);
-                        return targ;
+                    target: "state1",
+                    do: (targ) => {
+                        return ++targ;
                     }
                 }
             },
