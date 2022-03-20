@@ -34,8 +34,8 @@
         <textarea name="yes2" id="rows" cols="30" rows="10" @text>Some stuff here {{#state1#}}</textarea>
         <ul @bind>
             <li>{{@state1}}</li>
-            <li>{{@state1}}</li>
-            <li>{{@state1}}</li>
+            <li>{{@state2}}</li>
+            <li>{{@state3}}</li>
         </ul>
         <input type="text" name="yes" id="aaaa" @value="{{state1}}">
         <mini-basic ptext="Yes baby!"></mini-basic>
@@ -51,6 +51,8 @@
             entry: "app",
             appState: {
                 state1: 1,
+                state2: 4,
+                state3: "Hello",
             },
             actions: {
                 "addOne": {

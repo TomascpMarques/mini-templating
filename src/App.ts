@@ -261,9 +261,28 @@ class App implements StateHolder, ValueBinder {
 
             filteredValues.forEach(value => {
                 let templateDefined = `<${template} @react="${value}" @value="${this.getStateByID(value)}"></${template}>`;
+                if (this.#debugging) {
+                    miniCustomMessage(
+                        'mini-debug',
+                        {
+                            'Current Value': value,
+                            'Processed Template': templateDefined,
+                        }
+                    );
+                    miniCustomMessage(
+                        'mini-debug',
+                        {
+                            'Previous innerHTML': binded.innerHTML
+                        }
+                    );
+                }
+                const currentValueExpression = new RegExp(
+                    `\{\{\@${value}\}\}`,
+                    'gm'
+                );
                 binded.innerHTML = binded.innerHTML
                     .replace(
-                        /{{@\w+}}/gm,
+                        currentValueExpression,
                         templateDefined
                     );
 
@@ -273,6 +292,7 @@ class App implements StateHolder, ValueBinder {
                         'mini-debug',
                         {
                             'Generated a <mini-var>': templateDefined,
+                            'For state': value,
                         }
                     );
                 }
