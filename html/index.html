@@ -29,10 +29,12 @@
             This technique will proably work with all input types
             as long the binded state is appropriate to the input type.
          -->
-        <input type="number" name="a" id="inp1" @value="{{state2}">
+        <input type="number" name="a" id="inp1" @value="{{state1}}">
+        <input type="number" name="a" id="inp133" @value="{{state1}}">
         <!-- TODO: Text areas need a diferent way of tempating -->
         <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state3}}">
         </textarea>
+        <textarea name="yas" id="txt2" cols="30" rows="10" @bind>!!!Some stuff here for you, {{@state3}}</textarea>
         <!--
             1. get all @text atributted elements
             2. filter for the template areas
@@ -40,7 +42,9 @@
             4. update the template with the value.
             (5). to keep updatin the value, refer to the previous stored value
          -->
-        <textarea name="yes2" id="rows" cols="30" rows="10" @text>Some stuff here {{#state1#}}</textarea>
+        <textarea name="yes2" id="rows" cols="30" rows="10" @bind>
+            Some stuff here {{@state1}}
+        </textarea>
         <ul @bind>
             <li>{{@state1}}</li>
             <li>{{@state2}}</li>
@@ -86,12 +90,12 @@
                 "spaceOutLetters": {
                     target: "state3",
                     do: (targ) => {
-                        targ = targ.split('').join(' ');
+                        targ = "Good Bye";
                         return targ;
                     },
                 }
             },
-            debug: false,
+            debug: true,
         });
     </script>
 </body>

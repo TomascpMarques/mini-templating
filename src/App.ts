@@ -58,7 +58,6 @@ class App implements StateHolder, ValueBinder {
                 }
             )
         }
-
     }
 
     /**
@@ -98,7 +97,6 @@ class App implements StateHolder, ValueBinder {
         this.updateStateListener(target_id);
 
         if (this.#debugging) {
-
             console.log('[mini-debug] App value/state store:\n');
             console.table(this.store);
         }
@@ -109,15 +107,30 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            x => x.getAttribute('@value') === `{{${src_id}}}`
+            x => x.hasAttribute('@bind') || x.getAttribute('@value') === `{{${src_id}}}`
                 && x.tagName.toLowerCase() !== 'mini-var'
         );
 
         regularTagListners.forEach(element => {
             switch (element.tagName.toLowerCase()) {
+                // Fully replace the text-area value with the state
+                // no templating yet
                 case 'textarea': {
                     (element as HTMLTextAreaElement).value =
-                        this.getStateByID(src_id);
+                        (element as HTMLTextAreaElement).innerHTML.split(' ')
+                            .map(currentTxtWord => {
+                                const bindersInCurrentWord =
+                                    currentTxtWord.match(/\{\{\@\w+\}\}/gm);
+
+                                if (bindersInCurrentWord !== null) {
+                                    let bindedState = bindersInCurrentWord[0].slice(3, -2);
+                                    currentTxtWord = currentTxtWord.replace(
+                                        /\{\{\@\w+\}\}/gm,
+                                        this.getStateByID(bindedState)
+                                    );
+                                }
+                                return currentTxtWord;
+                            }).join(' ');
                     break;
                 };
                 default: {
@@ -195,20 +208,23 @@ class App implements StateHolder, ValueBinder {
             const valueBinding =
                 (e.getAttribute('@value') as string)
                     .slice(2, -2).toString();
+
             switch (e.tagName.toLowerCase()) {
                 case 'textarea': {
                     (e as HTMLTextAreaElement).value =
-                        this.getStateByID(valueBinding);
+                        (e as HTMLTextAreaElement).value.replace(
+                            /\{\{\@\w+\}\}/gm,
+                            this.getStateByID(valueBinding)
+                        );
                     break;
                 }
                 default:
-                    e.setAttribute('value', this.getStateByID(
-                        (e.getAttribute('@value') as string)
-                            .slice(2, -2).toString()
-                    ))
+                    e.setAttribute(
+                        'value',
+                        this.getStateByID(valueBinding)
+                    )
                     break;
             };
-
         });
     }
 
@@ -280,11 +296,20 @@ class App implements StateHolder, ValueBinder {
                     `\{\{\@${value}\}\}`,
                     'gm'
                 );
-                binded.innerHTML = binded.innerHTML
-                    .replace(
-                        currentValueTemplateExp,
-                        templateDefined
-                    );
+
+                if (binded.tagName.toLowerCase() === 'textarea') {
+                    (binded as HTMLTextAreaElement).value = (binded as HTMLTextAreaElement).value
+                        .replace(
+                            currentValueTemplateExp,
+                            this.getStateByID(value)
+                        );
+                } else {
+                    binded.innerHTML = binded.innerHTML
+                        .replace(
+                            currentValueTemplateExp,
+                            templateDefined
+                        );
+                }
 
                 this.addValueBind(value, `@${value}`)
                 if (this.#debugging) {
