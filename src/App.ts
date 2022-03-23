@@ -44,7 +44,7 @@ class App implements StateHolder, ValueBinder {
 
         // Set up of the app entry point
         // Value and state storage
-        this.store = config.appState;
+        this.store = config.store;
         this.actions = config.actions;
         this.setupBindedValues();
 
@@ -75,7 +75,7 @@ class App implements StateHolder, ValueBinder {
         let action_do_result: any;
 
         if (typeof this.getStateByID(target_id) !== 'undefined') {
-            action_do_result = this.actions[action].do(target);
+            action_do_result = this.actions[action].do(this.store, target);
         }
         else {
             throw new Error(`[mini-debug] Error: The given state is not valid: <${target}>`);
@@ -107,11 +107,13 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            x => x.hasAttribute('@bind') || x.getAttribute('@value') === `{{${src_id}}}`
+            x => (x.hasAttribute('@bind') || x.getAttribute('@value') === `{{${src_id}}}`)
                 && x.tagName.toLowerCase() !== 'mini-var'
         );
 
+        console.log("Current src_id: " + src_id);
         regularTagListners.forEach(element => {
+            console.log("Current Element: " + element.tagName);
             switch (element.tagName.toLowerCase()) {
                 // Fully replace the text-area value with the state
                 // no templating yet
@@ -141,8 +143,17 @@ class App implements StateHolder, ValueBinder {
                     break;
                 }
             };
-        }
-        );
+            // (element as HTMLElement).onchange = (value) => {
+            //     this.setStateByID(src_id, value);
+            //     this.updateStateListener(src_id);
+            // };
+
+        });
+    };
+
+    public updateStateValuesFormBindings = (_: any, value: any, id: string) => {
+        this.setStateByID(id, value);
+        this.updateStateListener(id);
     };
 
     private updateStateListener = (src_id: string) => {
@@ -177,14 +188,6 @@ class App implements StateHolder, ValueBinder {
         // Update regular HTML elements state binded values + + +
         this.valueUpdateStdHTMLElements(src_id);
         // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-
-        // document.getElementById(src_id)?.addEventListener('input', () => {
-        //     setTimeout(() => {
-        //         this.updateStateListener(
-        //             (document.getElementById(src_id) as HTMLElement).id
-        //         );
-        //     }, 400);
-        // });
     };
 
     private valueBindingsForStdHTMLElements = () => {
@@ -276,7 +279,8 @@ class App implements StateHolder, ValueBinder {
             }
 
             filteredValues.forEach(value => {
-                let templateDefined = `<${template} @react="${value}" @value="${this.getStateByID(value)}"></${template}>`;
+                let templateDefined =
+                    `<${template} @react="${value}" @value="${this.getStateByID(value)}"></${template}>`;
                 if (this.#debugging) {
                     miniCustomMessage(
                         'mini-debug',
@@ -298,11 +302,12 @@ class App implements StateHolder, ValueBinder {
                 );
 
                 if (binded.tagName.toLowerCase() === 'textarea') {
-                    (binded as HTMLTextAreaElement).value = (binded as HTMLTextAreaElement).value
-                        .replace(
-                            currentValueTemplateExp,
-                            this.getStateByID(value)
-                        );
+                    (binded as HTMLTextAreaElement).value =
+                        (binded as HTMLTextAreaElement).value
+                            .replace(
+                                currentValueTemplateExp,
+                                this.getStateByID(value)
+                            );
                 } else {
                     binded.innerHTML = binded.innerHTML
                         .replace(

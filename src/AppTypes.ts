@@ -22,7 +22,7 @@ type ValueBindings = {
  */
 type Action = {
     target: string;
-    do: (context?: any) => any;
+    do: (app: StateStore, context?: any) => any;
 };
 
 /**
@@ -78,7 +78,7 @@ interface StateHolder {
  */
 type ApplicationSetupConfigs = {
     entry: string;
-    appState: StateStore;
+    store: StateStore;
     actions: { [key: string]: Action };
     debug: boolean;
 };

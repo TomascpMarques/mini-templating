@@ -2,39 +2,32 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="./../dist/mini.js">
-    </script>
+    <script src="./../dist/mini.js"></script>
 </head>
 
 <body>
     <main id="app" name="application">
-        <button id="bt1" onclick="app.handle('addOne')">
-            Add 1
-        </button>
+        <button id="bt1" onclick="app.handle('addOne')">Add 1</button>
         <button id="bt2" onclick="app.handle('spaceOutLetters')">
             Change text
         </button>
-        <button id="bt3" onclick="app.handle('2x')">
-            Multiply by 2
-        </button>
-        <button id="bt4" onclick="app.handle('docWrite')">
-            Write in doc
-        </button>
+        <button id="bt3" onclick="app.handle('2x')">Multiply by 2</button>
+        <button id="bt4" onclick="app.handle('docWrite')">Write in doc</button>
         <p id="p1" @bind>Here {{@state1}}</p>
         <!--
             This technique will proably work with all input types
             as long the binded state is appropriate to the input type.
          -->
-        <input type="number" name="a" id="inp1" @value="{{state1}}">
-        <input type="number" name="a" id="inp133" @value="{{state1}}">
-        <!-- TODO: Text areas need a diferent way of tempating -->
-        <textarea name="yes" id="txt1" cols="30" rows="10" @value="{{state3}}">
+        <input type="color" @value="{{state5}}" />
+        <input type="number" name="a" id="inp1" @value="{{state1}}" />
+        <input type="number" name="a" id="inp133" @value="{{state1}}" />
+        <textarea name="yas" id="txt2" cols="30" rows="10" @bind>
+            !!!Some stuff here for you, {{@state3}}
         </textarea>
-        <textarea name="yas" id="txt2" cols="30" rows="10" @bind>!!!Some stuff here for you, {{@state3}}</textarea>
         <!--
             1. get all @text atributted elements
             2. filter for the template areas
@@ -50,7 +43,7 @@
             <li>{{@state2}}</li>
             <li>{{@state3}}</li>
         </ul>
-        <input type="text" name="yes" id="aaaa" @value="{{state1}}">
+        <input type="text" name="yes" id="aaaa" @value="{{state1}}" />
         <mini-basic ptext="Yes baby!"></mini-basic>
         <p @bind>Should update: {{@state2}} Lorem, ipsum dolor.</p>
         <div>
@@ -58,42 +51,62 @@
             <p @bind>Shoul also update: {{@state3}}</p>
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
+        <input type="number" id="inp111" @value="{{num1}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num1')" />
+        <input type="number" id="inp112" @value="{{num2}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num2')" />
+        <button id=" bt1 " onclick="app.handle('sumTwoNumbers')">
+            Sum numbers
+        </button>
+        <p @bind>O valor da soma é: {{@result}}</p>
     </main>
     <script>
         const app = newMini({
-            entry: "app",
-            appState: {
+            entry: 'app',
+            store: {
                 state1: 1,
                 state2: 4,
-                state3: "Hello",
+                state3: 'Hello',
+                state5: '#ffbaa0',
+                num1: 0,
+                num2: 0,
+                result: 0,
             },
             actions: {
-                "docWrite": {
-                    "target": "state1",
-                    do: (d) => {
-                        console.log('Here')
-                        return d;
-                    }
-                },
-                "addOne": {
-                    target: "state1",
-                    do: (targ) => {
-                        return ++targ;
-                    }
-                },
-                "2x": {
-                    target: "state2",
-                    do: (targ) => {
-                        return targ *= 2;
+                sumTwoNumbers: {
+                    target: 'result',
+                    do: (state, t) => {
+                        const value1 = state['num1'];
+                        const value2 = state['num2'];
+                        console.log(`O valor da appState: ${app.store['num2']}`);
+                        t = Number(value1) + Number(value2);
+                        return t;
                     },
                 },
-                "spaceOutLetters": {
-                    target: "state3",
-                    do: (targ) => {
-                        targ = "Good Bye";
+                docWrite: {
+                    target: 'state1',
+                    do: (_, d) => {
+                        console.log('Here');
+                        return d;
+                    },
+                },
+                addOne: {
+                    target: 'state1',
+                    do: (_, targ) => {
+                        return ++targ;
+                    },
+                },
+                '2x': {
+                    target: 'state2',
+                    do: (_, targ) => {
+                        return (targ *= 2);
+                    },
+                },
+                'spaceOutLetters': {
+                    target: 'state3',
+                    do: (_, targ) => {
+                        targ = 'Good Bye';
                         return targ;
                     },
-                }
+                },
             },
             debug: true,
         });
