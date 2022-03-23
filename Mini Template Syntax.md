@@ -75,7 +75,9 @@ These configs hold the state of the application, it's entry point and the action
 ```HTML
    <body>
        <main name='Mini App' id='app'>
-           <button id='bt1'>Add 1</button>
+           <button id='bt1' onclick="app.handle('addOne')">
+                Add 1
+           </button>
            <p @bind>The value is: {{@number}}.</p>
            <!--
                On body ready: « The value is: 1. »
@@ -88,13 +90,13 @@ These configs hold the state of the application, it's entry point and the action
             // -> entry point <main id='app'>
            const newApp = newMini(
             'entry': 'app',
-            'appState': {
+            'store': {
                 'number': 1
             },
             'actions': {
                 'addOne' : {
                     'target': 'number1',
-                    'do': (t) => { return ++t }
+                    'do': (_, t) => { return ++t }
                 }
             },
             debug: false,
