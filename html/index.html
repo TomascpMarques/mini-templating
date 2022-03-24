@@ -51,8 +51,10 @@
             <p @bind>Shoul also update: {{@state3}}</p>
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
-        <input type="number" id="inp111" @value="{{num1}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num1')" />
-        <input type="number" id="inp112" @value="{{num2}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num2')" />
+        <input type="number" id="inp111" @value="{{num1}}">
+        <input type="number" id="inp112" @value="{{num2}}">
+        <!-- <input type="number" id="inp111" @value="{{num1}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num1')" />
+        <input type="number" id="inp112" @value="{{num2}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num2')" /> -->
         <button id=" bt1 " onclick="app.handle('sumTwoNumbers')">
             Sum numbers
         </button>
@@ -83,9 +85,8 @@
                 },
                 docWrite: {
                     target: '_',
-                    do: (_, d) => {
+                    do: () => {
                         console.log('Here');
-                        return d;
                     },
                 },
                 addOne: {
