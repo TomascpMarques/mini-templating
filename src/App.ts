@@ -1,6 +1,7 @@
 class App implements StateHolder, ValueBinder {
     // Class development and debugging values
     readonly binderAtributte: string = '@bind';
+    readonly valueBidedAttribute: string = '@value';
     readonly #debugging: boolean;
     #customTags: { [key: string]: string } = {};
 
@@ -114,7 +115,7 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            x => (x.hasAttribute('@bind') || x.getAttribute('@value') === `{{${src_id}}}`)
+            x => (x.hasAttribute('@bind') || x.getAttribute(this.valueBidedAttribute) === `{{${src_id}}}`)
                 && x.tagName.toLowerCase() !== 'mini-var'
         );
 
@@ -150,15 +151,18 @@ class App implements StateHolder, ValueBinder {
                     break;
                 }
             };
-            // (element as HTMLElement).onchange = (value) => {
-            //     this.setStateByID(src_id, value);
-            //     this.updateStateListener(src_id);
-            // };
+            /*
+                app.updateStateValuesFormBindings(null, this.value, 'num1')
+            */
 
+            // element.setAttribute(
+            //     'onchange',
+            //     `app.updateStateValuesFormBindings(this.value, '${src_id}')`
+            // )
         });
     };
 
-    public updateStateValuesFormBindings = (_: any, value: any, id: string) => {
+    public updateStateValuesFormBindings = (value: any, id: string) => {
         this.setStateByID(id, value);
         this.updateStateListener(id);
     };
@@ -204,7 +208,7 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            elem => elem.hasAttribute('@value')
+            elem => elem.hasAttribute(this.valueBidedAttribute)
         );
 
         stdHTMLBindedValues.forEach(e => {
@@ -216,7 +220,7 @@ class App implements StateHolder, ValueBinder {
             );
 
             const valueBinding =
-                (e.getAttribute('@value') as string)
+                (e.getAttribute(this.valueBidedAttribute) as string)
                     .slice(2, -2).toString();
 
             switch (e.tagName.toLowerCase()) {
@@ -235,6 +239,10 @@ class App implements StateHolder, ValueBinder {
                     )
                     break;
             };
+            e.setAttribute(
+                'onchange',
+                `app.updateStateValuesFormBindings(this.value, '${valueBinding}')`
+            )
         });
     }
 
