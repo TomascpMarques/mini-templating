@@ -59,10 +59,9 @@ class MiniTemplate extends HTMLElement {
      * @param {any} new_value The new value to insert in the template
      */
     public updateInnerValue = (new_value: any) => {
-        this.shadowRoot?.replaceChild(
-            document.createTextNode(new_value),
-            (this.shadowRoot?.firstChild as Node)
-        )
+        (this.shadowRoot as ShadowRoot).replaceChildren(
+            document.createTextNode(new_value)
+        );
     }
 }
 
