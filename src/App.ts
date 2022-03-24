@@ -50,6 +50,7 @@ class App implements StateHolder, ValueBinder {
 
         this.actions = config.actions;
         this.setupBindedValues();
+        this.setUpOnChangeEventForValuedElements();
 
         if (this.#debugging) {
             miniCustomMessage(
@@ -63,6 +64,25 @@ class App implements StateHolder, ValueBinder {
         }
     }
 
+    private setUpOnChangeEventForValuedElements = () => {
+        const valueAttributedElements = Array.from(
+            (document.getElementById(this.app_entry) as HTMLElement)
+                .getElementsByTagName('*')
+        ).filter(elem =>
+            elem.hasAttribute('@value')
+        );
+
+        valueAttributedElements.map(element => {
+            const expectedBinder =
+                element.getAttribute(this.valueBidedAttribute)?.slice(2, -2);
+            element.setAttribute(
+                'onchange',
+                `app.updateStateValuesFormBindings(this.value, '${expectedBinder}')`
+            );
+        });
+    }
+
+    // that don't need to use state
     private setUpAbsorberState = () => {
         this.setStateByID('_', null);
     }
@@ -239,10 +259,10 @@ class App implements StateHolder, ValueBinder {
                     )
                     break;
             };
-            e.setAttribute(
-                'onchange',
-                `app.updateStateValuesFormBindings(this.value, '${valueBinding}')`
-            )
+            // e.setAttribute(
+            //     'onchange',
+            //     `app.updateStateValuesFormBindings(this.value, '${valueBinding}')`
+            // )
         });
     }
 
@@ -342,9 +362,7 @@ class App implements StateHolder, ValueBinder {
                     );
                 }
             });
-
         });
-
     };
 
     // =================================================================
@@ -374,11 +392,6 @@ class App implements StateHolder, ValueBinder {
     };
 
     public setStateByID = (id: string, value: any) => {
-        // if (document.getElementById(id) === null) {
-        //     let err_mss = `[mini-debug] Error: The given element <${id}> does not exist`;
-        //     throw new Error(err_mss);
-        // }
-
         if (this.#debugging) {
             miniCustomMessage(
                 'mini-debug',
