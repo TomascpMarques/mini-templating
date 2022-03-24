@@ -64,7 +64,7 @@ These configs hold the state of the application, it's entry point and the action
 | Name | Type | Example |
 | ----- | ------------------------ | --------------- |
 | entry | String - HTML Element ID | `'app'` or `'Mini'` |
-| appState | Js Object - String/value pairs | `{ 'loggin': true }` |
+| store | Js Object - String/value pairs | `{ 'loggin': true }` |
 | actions | Js Object - String/(target-func) pairs | `{'logout': {'target': 'login}, 'do': (t) => {return !t}}` |
 | debug | Boolean | `true` or `false` |
 
@@ -88,19 +88,30 @@ These configs hold the state of the application, it's entry point and the action
        <script>
             // Define new App
             // -> entry point <main id='app'>
-           const newApp = newMini(
-            'entry': 'app',
-            'store': {
-                'number': 1
-            },
-            'actions': {
-                'addOne' : {
-                    'target': 'number1',
-                    'do': (_, t) => { return ++t }
-                }
-            },
-            debug: false,
-           );
+            // Example bellow
        </script>
    </body>
+```
+
+```JavaScript
+    const newApp = newMini(
+        'entry': 'app',
+        'store': {
+            'number': 1
+        },
+        'actions': {
+            'addOne' : {
+                'target': 'number1',
+                /*  The first parameter is app state
+                    The second parameter is the target  */
+                do: (_, t) => { return ++t }
+            },
+            'logHello' : {
+                /* This action targets no state, and mutates no state */
+                'target': '_',
+                do: () => { console.log('Hello!) }
+            }
+        },
+        'debug': false,
+    );
 ```
