@@ -13,7 +13,8 @@
     "scripts": {
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
-        "minify": "minify dist/**.js > minyfied/mini.js"
+        "minify": "minify dist/**.js > minyfied/mini.js",
+        "prepublish": "yarn build; yarn minify"
     },
     "repository": {
         "type": "git",

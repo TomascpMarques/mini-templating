@@ -45,6 +45,8 @@ class App implements StateHolder, ValueBinder {
         // Set up of the app entry point
         // Value and state storage
         this.store = config.store;
+        this.setUpAbsorberState();
+
         this.actions = config.actions;
         this.setupBindedValues();
 
@@ -58,6 +60,10 @@ class App implements StateHolder, ValueBinder {
                 }
             )
         }
+    }
+
+    private setUpAbsorberState = () => {
+        this.setStateByID('_', null);
     }
 
     /**
@@ -92,9 +98,10 @@ class App implements StateHolder, ValueBinder {
             );
         }
 
-        // Handle valaue/state changes in DOM
-        this.setStateByID(target_id, action_do_result);
-        this.updateStateListener(target_id);
+        if (this.actions[action].target !== '_') {
+            // Handle valaue/state changes in DOM
+            this.updateStateAndListners(target_id, action_do_result);
+        }
 
         if (this.#debugging) {
             console.log('[mini-debug] App value/state store:\n');
@@ -383,4 +390,14 @@ class App implements StateHolder, ValueBinder {
         this.store[id] = value;
         return null;
     };
+
+    /**
+     * Updates the app state and respective listners
+     * @param {string} target_id The id for the target state object
+     * @param {any} action_do_result the resulting value from the action
+     */
+    private updateStateAndListners(target_id: string, action_do_result: any) {
+        this.setStateByID(target_id, action_do_result);
+        this.updateStateListener(target_id);
+    }
 }
