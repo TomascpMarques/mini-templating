@@ -11,6 +11,10 @@
 
 <body>
     <main id="app" name="application">
+        <mini-component id="blin" src="./component.html">
+        </mini-component>
+        <br> <br>
+        <q @bind>{{@state1}}</q>
         <button id="bt1" onclick="app.handle('addOne')">Add 1</button>
         <button id="bt2" onclick="app.handle('spaceOutLetters')">
             Change text

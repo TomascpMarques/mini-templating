@@ -38,9 +38,11 @@ class App implements StateHolder, ValueBinder {
         // DEVELOPING Mini custom tags
         customElements.define('mini-basic', Mini);
         customElements.define('mini-var', MiniTemplate);
+        customElements.define('mini-component', CustomElement);
         this.#customTags = {
             'basic': 'mini-basic',
             'template': 'mini-var',
+            'component': 'mini-component'
         };
 
         // Set up of the app entry point
