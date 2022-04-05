@@ -7,11 +7,7 @@
 - Action handeling;
 - Value updating
 
-<br>
-
 ## Create a new Mini App
-
----
 
 ### **Initial Mini Import**
 
@@ -19,15 +15,15 @@ First just import the script file **right in the head section**
 of the document, this will allow you to use _Mini_ later in the body
 section of the document.
 
-> Import Mini into the document.
-
 ```HTML
    <head>
        ...
        <script src="./../dist/mini.js">
-       </script>
+           </script>
    </head>
 ```
+
+> Import Mini into the document.
 
 ---
 
@@ -35,8 +31,6 @@ Next, at the end section of the body section, declare the script
 secction or import you _Mini_ app file.
 
 In the body script section, create the a new mini app
-
-> Define the basic makrup/script structure of the page.
 
 ```HTML
    <body>
@@ -55,6 +49,8 @@ In the body script section, create the a new mini app
    </body>
 ```
 
+> Define the basic makrup/script structure of the page.
+
 ---
 
 Now we will define the configurations for the new application.
@@ -68,9 +64,9 @@ These configs hold the state of the application, it's entry point and the action
 | actions | Js Object - String/(target-func) pairs | `{'logout': {'target': 'login}, 'do': (t) => {return !t}}` |
 | debug | Boolean | `true` or `false` |
 
-<br>
-
 ### **Example cofiguration**
+
+**Body tag app section**
 
 ```HTML
    <body>
@@ -92,6 +88,8 @@ These configs hold the state of the application, it's entry point and the action
        </script>
    </body>
 ```
+
+**Body script tag**
 
 ```JavaScript
     const newApp = newMini(
