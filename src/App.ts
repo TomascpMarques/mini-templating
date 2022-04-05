@@ -137,8 +137,8 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            x => (x.hasAttribute('@bind') || x.getAttribute(this.valueBidedAttribute) === `{{${src_id}}}`)
-                && x.tagName.toLowerCase() !== 'mini-var'
+            x => (x.hasAttribute(this.binderAtributte) || x.getAttribute(this.valueBidedAttribute) === `{{${src_id}}}`)
+                && x.tagName.toLowerCase() !== this.#customTags['template']
         );
 
         console.log("Current src_id: " + src_id);
@@ -173,14 +173,6 @@ class App implements StateHolder, ValueBinder {
                     break;
                 }
             };
-            /*
-                app.updateStateValuesFormBindings(null, this.value, 'num1')
-            */
-
-            // element.setAttribute(
-            //     'onchange',
-            //     `app.updateStateValuesFormBindings(this.value, '${src_id}')`
-            // )
         });
     };
 
@@ -261,10 +253,6 @@ class App implements StateHolder, ValueBinder {
                     )
                     break;
             };
-            // e.setAttribute(
-            //     'onchange',
-            //     `app.updateStateValuesFormBindings(this.value, '${valueBinding}')`
-            // )
         });
     }
 
@@ -290,9 +278,11 @@ class App implements StateHolder, ValueBinder {
         let bindedElements = Array.from(
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
-        ).filter(
-            element => element.hasAttribute(this.binderAtributte)
         );
+
+        bindedElements = bindedElements.filter(
+            element => element.hasAttribute(this.binderAtributte)
+        )
 
         // Changin the template text for the proper mini-<tag>
         bindedElements.forEach(binded => {

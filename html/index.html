@@ -11,7 +11,7 @@
 
 <body>
     <main id="app" name="application">
-        <mini-component id="blin" src="./component.html">
+        <mini-component src="./component.html">
         </mini-component>
         <br> <br>
         <q @bind>{{@state1}}</q>
@@ -77,6 +77,10 @@
                 result: 0,
             },
             actions: {
+                ss: {
+                    target: '_',
+                    do: () => console.log("Something cool"),
+                },
                 sumTwoNumbers: {
                     target: 'result',
                     do: (state, stateResult) => {
