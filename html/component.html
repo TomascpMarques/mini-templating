@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Some component</title>
-</head>
-
-<body>
-    <section id="compo1">
-        <h2>Lorem, ipsum.</h2>
-        <hr>
-        <h4 id="sub_title">Lorem ipsum dolor sit amet consectetur.</h4>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            <mark>Commodi nostrum</mark> , illo fuga repudiandae provident non mollitia voluptatum corporis adipisci in voluptate labore. Ab totam placeat quos cumque molestiae ipsa repudiandae.
-        </p>
-        <p id="blin" @bind>Here {{@state1}}</p>
-        <button onclick="app.handle('ss')">Press Me</button>
-    </section>
-</body>
-
-</html>
+<div>
+    <h2>Lorem, ipsum.</h2>
+    <hr>
+    <h4 id="sub_title">Lorem ipsum dolor sit amet consectetur.</h4>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <mark>Commodi nostrum</mark> , illo fuga repudiandae provident non mollitia voluptatum corporis adipisci in voluptate labore. Ab totam placeat quos cumque molestiae ipsa repudiandae.
+    </p>
+    <q id="sss" @bind>Cyka {{@state1}}</q>
+    <button onclick="app.handle('ss')">Press Me</button>
+</div>

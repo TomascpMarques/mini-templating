@@ -17,9 +17,9 @@ const app = newMini({
         sumTwoNumbers: {
             target: 'result',
             do: (state, stateResult) => {
-                const value1 = state['num1'];
-                const value2 = state['num2'];
-                console.log(`O valor da appState: ${app.store['result']}`);
+                const value1 = state.num1;
+                const value2 = state.num2;
+                console.log(`O valor da appState: ${app.store.result}`);
                 stateResult = Number(value1) + Number(value2);
                 return stateResult;
             },

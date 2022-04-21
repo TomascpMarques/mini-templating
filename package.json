@@ -9,8 +9,8 @@
     "dependencies": {},
     "name": "@sum_sum/mini-templating",
     "version": "1.0.0",
-    "description": "A simple templating/reactive-elements helper for low code pages",
-    "main": "index.js",
+    "description": "A simple templating/reactive-elements helper for low code web pages",
+    "main": "App.ts",
     "scripts": {
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
@@ -29,6 +29,7 @@
     ],
     "author": "Tomás Marques",
     "license": "MIT",
+    "type": "module",
     "bugs": {
         "url": "https://github.com/TomascpMarques/mini-templating/issues"
     },
