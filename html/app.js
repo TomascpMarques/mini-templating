@@ -1,4 +1,6 @@
-const app = newMini({
+import * as mini from '../src/mini.js';
+
+window.app = mini.newMini({
     entry: 'app',
     store: {
         state1: 1,

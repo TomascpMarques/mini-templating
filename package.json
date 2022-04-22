@@ -10,12 +10,14 @@
     "name": "@sum_sum/mini-templating",
     "version": "1.0.4",
     "description": "A simple templating/reactive-elements helper for low code web pages",
-    "main": "App.ts",
+    "main": "/src/mini.js",
     "scripts": {
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
         "minify": "minify dist/**.js > src/mini.js",
-        "prepublish": "yarn build; yarn minify"
+        "prepublish": "yarn build; yarn minify",
+        "clean": "rm -rf dist/**",
+        "reset": "rm -rf dist/**; rm -rf src/**"
     },
     "repository": {
         "type": "git",
