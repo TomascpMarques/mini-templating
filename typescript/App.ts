@@ -72,14 +72,6 @@ class App implements StateHolder, ValueBinder {
                 }
             )
         }
-
-        // Makes sure all elements are loaded before
-        // setting up value binds
-        document.body.onload = () => {
-            console.log(`The document body: ${document.body.innerHTML}`);
-            this.setupBindedValues();
-            this.setUpOnChangeEventForValuedElements();
-        };
     }
 
     private setUpOnChangeEventForValuedElements = () => {

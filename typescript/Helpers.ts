@@ -24,17 +24,17 @@ const miniCustomMessage = (title: string, values: { [key: string]: any }) => {
  * @param _indexStart the desired iterator start position defaults to 0
  * @returns An object that behaves as an iterator
  */
-const iteratorFrom = <T>(values: Array<T>, _indexStart: number = 0) => {
-    return {
-        vals: values,
-        indexer: _indexStart,
-        len: values.length,
+// const iteratorFrom = <T>(values: Array<T>, _indexStart: number = 0) => {
+//     return {
+//         vals: values,
+//         indexer: _indexStart,
+//         len: values.length,
 
-        next: function (): T {
-            // this.indexer++: this will increment the index after the value is used
-            // % this.vals.length: this will make the iterator start over the values
-            //                     upon a full iteration of the array
-            return this.vals[(this.indexer++ % this.vals.length)]
-        }
-    }
-};
+//         next: function (): T {
+//             // this.indexer++: this will increment the index after the value is used
+//             // % this.vals.length: this will make the iterator start over the values
+//             //                     upon a full iteration of the array
+//             return this.vals[(this.indexer++ % this.vals.length)]
+//         }
+//     }
+// };

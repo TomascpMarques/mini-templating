@@ -86,3 +86,4 @@ type ApplicationSetupConfigs = {
 const hello_world = () => {
     console.log('HelloWorld!');
 };
+
