@@ -8,7 +8,7 @@
     },
     "dependencies": {},
     "name": "@sum_sum/mini-templating",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "description": "A simple templating/reactive-elements helper for low code web pages",
     "main": "/src/mini.js",
     "scripts": {
