@@ -14,7 +14,7 @@
     "scripts": {
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
-        "minify": "minify dist/**.js > minyfied/mini.js",
+        "minify": "minify dist/**.js > src/mini.js",
         "prepublish": "yarn build; yarn minify"
     },
     "repository": {
