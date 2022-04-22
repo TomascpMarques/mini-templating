@@ -51,6 +51,7 @@ class App implements StateHolder, ValueBinder {
         this.setUpAbsorberState();
 
         this.actions = config.actions;
+
         this.setupBindedValues();
         this.setUpOnChangeEventForValuedElements();
 
@@ -64,6 +65,13 @@ class App implements StateHolder, ValueBinder {
                 }
             )
         }
+
+        // Makes sure all elements are loaded before
+        // setting up value binds
+        window.onload = () => {
+            this.setupBindedValues();
+            this.setUpOnChangeEventForValuedElements();
+        };
     }
 
     private setUpOnChangeEventForValuedElements = () => {
@@ -137,11 +145,11 @@ class App implements StateHolder, ValueBinder {
             (document.getElementById(this.app_entry) as HTMLElement)
                 .getElementsByTagName('*')
         ).filter(
-            x => (x.hasAttribute(this.binderAtributte) || x.getAttribute(this.valueBidedAttribute) === `{{${src_id}}}`)
+            x => (x.hasAttribute(this.binderAtributte) && x.getAttribute(this.valueBidedAttribute) === `{{${src_id}}}`)
                 && x.tagName.toLowerCase() !== this.#customTags['template']
         );
 
-        console.log("Current src_id: " + src_id);
+        console.log("-> Current src_id: " + src_id);
         regularTagListners.forEach(element => {
             console.log("Current Element: " + element.tagName);
             switch (element.tagName.toLowerCase()) {
@@ -284,6 +292,8 @@ class App implements StateHolder, ValueBinder {
             element => element.hasAttribute(this.binderAtributte)
         )
 
+
+
         // Changin the template text for the proper mini-<tag>
         bindedElements.forEach(binded => {
             const template = this.#customTags['template'];
@@ -305,7 +315,9 @@ class App implements StateHolder, ValueBinder {
                 console.table(filteredValues);
             }
 
-            filteredValues.forEach(value => {
+            // Prevents an error when trying to access
+            // a undefined filtered values
+            filteredValues && filteredValues.forEach(value => {
                 let templateDefined =
                     `<${template} @react="${value}" @value="${this.getStateByID(value)}"></${template}>`;
                 if (this.#debugging) {
