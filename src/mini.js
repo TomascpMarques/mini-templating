@@ -8,5 +8,5 @@
         }
         `,t.appendChild(i),t.appendChild(e),e.appendChild(r)}}
 export const newMini=n=>new App(n);
-"use strict";class CustomElement extends HTMLElement{constructor(){super();let t="";this.hasAttribute("src")&&(t=this.getAttribute("src")),fetch(t).then((t=>t.text())).then((e=>{let n=document.createElement("section");n.innerHTML=e||"<b>No Component Content</b>",this.replaceWith(n),document.dispatchEvent(new CustomEvent("custom-compo-build",{bubbles:!0,detail:{text:()=>t}}))})),console.log("[COMPO] The component has been created")}}
+"use strict";class CustomElement extends HTMLElement{constructor(){super();let t="";this.hasAttribute("src")&&(t=this.getAttribute("src")),fetch(t).then((t=>t.text())).then((e=>{this.replaceWith(document.createElement("section")),this.innerHTML=e||"<b>No Component Content</b>",document.dispatchEvent(new CustomEvent("custom-compo-build",{bubbles:!0,detail:{text:()=>t}}))})).catch((t=>{throw new Error(t.message||t)}))}}
 "use strict";const miniCustomMessage=(o,e)=>{let c=`%c[${o}]%c\n`,n=`${"-".repeat(o.length)} `,s="";Object.keys(e).forEach((o=>s+=`${o}: ${e[o]}\n`)),console.log(c+(n+"\n%c")+s,"color: orange","color: salmon","color:white")};
