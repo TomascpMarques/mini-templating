@@ -17,6 +17,11 @@ class App implements StateHolder, ValueBinder {
     constructor(config: ApplicationSetupConfigs) {
         this.#debugging = config.debug;
 
+        document.addEventListener('custom-compo-build', () => {
+            this.setupBindedValues();
+            this.setUpOnChangeEventForValuedElements();
+        }, false);
+
         let temp: string | undefined = document.getElementById(config.entry)?.id;
 
         if (typeof temp !== "string") {
@@ -33,6 +38,7 @@ class App implements StateHolder, ValueBinder {
                     'New app entry point': this.app_entry
                 }
             )
+
 
         // TODO Batch DOM Changes
 
@@ -69,7 +75,8 @@ class App implements StateHolder, ValueBinder {
 
         // Makes sure all elements are loaded before
         // setting up value binds
-        window.onload = () => {
+        document.body.onload = () => {
+            console.log(`The document body: ${document.body.innerHTML}`);
             this.setupBindedValues();
             this.setUpOnChangeEventForValuedElements();
         };

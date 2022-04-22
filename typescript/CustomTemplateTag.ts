@@ -13,7 +13,10 @@ class CustomElement extends HTMLElement {
             let innerContent: HTMLElement = document.createElement('section');
             innerContent.innerHTML = text || '<b>No Component Content</b>';
             this.replaceWith(innerContent)
+            document.dispatchEvent(new CustomEvent('custom-compo-build', { bubbles: true, detail: { text: () => componentLocation } }));
         });
+
+
         console.log(`[COMPO] The component has been created`);
     }
 }
