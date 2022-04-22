@@ -34,6 +34,8 @@ class App implements StateHolder, ValueBinder {
                 }
             )
 
+        // TODO Batch DOM Changes
+
         // TESTING mini-basic tag
         // DEVELOPING Mini custom tags
         customElements.define('mini-basic', Mini);
@@ -51,7 +53,6 @@ class App implements StateHolder, ValueBinder {
         this.setUpAbsorberState();
 
         this.actions = config.actions;
-
         this.setupBindedValues();
         this.setUpOnChangeEventForValuedElements();
 
