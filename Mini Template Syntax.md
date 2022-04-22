@@ -66,7 +66,7 @@ These configs hold the state of the application, it's entry point and the action
 
 ### **Example cofiguration**
 
-**Body tag app section**
+### **Body tag app section**
 
 ```HTML
    <body>
@@ -81,18 +81,19 @@ These configs hold the state of the application, it's entry point and the action
             -->
        </main>
 
-       <script>
-            // Define new App
-            // -> entry point <main id='app'>
-            // Example bellow
-       </script>
+       <script
+         type="module"
+         src="js/app.js"
+        ></script>
    </body>
 ```
 
-**Body script tag**
+#### **Body script tag**
 
 ```JavaScript
-    const newApp = newMini(
+    import * as mini from '@sum_sum/mini-templating';
+
+    window.app = mini.newMini(
         'entry': 'app',
         'store': {
             'number': 1
@@ -113,3 +114,44 @@ These configs hold the state of the application, it's entry point and the action
         'debug': false,
     );
 ```
+
+---
+
+## Components
+
+### Intro
+
+Components in mini are **directly inserted to the DOM**, they also share
+the global app state. By sharing the state this way no bubblig of events
+or dispatching, and or passing state to/through parent components is needed.
+
+### Component Creation
+
+The component in itself is just a container HTML tag, such as **div** or
+**section**. The html file is then read and inserted into the DOM.
+
+### Component Example
+
+A simple component, that will work with the [previous example](#body-script-tag), will be the following.
+
+```HTML
+<div>
+    <h2>Lorem, ipsum.</h2>
+    <hr>
+    <h4 id="sub_title">Lorem ipsum dolor sit amet consectetur.</h4>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <mark>Commodi nostrum</mark> , illo fuga repudiandae.
+    </p>
+    <q id="sss" @bind>Some state change {{@state1}}</q>
+    <button onclick="app.handle('addOne')">Press Me</button>
+</div>
+```
+
+The component inclusion in the main HTML file is as follows:
+
+```HTML
+<mini-component src="./component.html"> </mini-component>
+```
+
+The component (_achieved with JS's [customElement](https://developer.mozilla.org/en-US/docs/Web/API/Window/customElements))_ will handle the creation of content, emitting an event that will assure all state listeners are accounted for.
