@@ -53,11 +53,11 @@
             <p @bind>Shoul also update: {{@state3}}</p>
         </div>
         <p>Lorem ipsum dolor sit amet.</p>
-        <input type="number" id="inp111" @value="{{num1}}">
-        <input type="number" id="inp112" @value="{{num2}}">
+        <input type="number" id="inp111" @bind @value="{{num1}}">
+        <input type="number" id="inp112" @bind @value="{{num2}}">
         <!-- <input type="number" id="inp111" @value="{{num1}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num1')" />
         <input type="number" id="inp112" @value="{{num2}}" onchange="app.updateStateValuesFormBindings(null, this.value, 'num2')" /> -->
-        <button id=" bt1 " onclick="app.handle('add')">
+        <button id=" bt1 " onclick="app.handle('sumTwoNumbers')">
             Sum numbers
         </button>
         <p @bind>O valor da soma é: {{@result}}</p>
