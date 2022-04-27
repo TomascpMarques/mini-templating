@@ -9,8 +9,8 @@ class CustomElement extends HTMLElement {
         // Make sure the component content source is
         // available for usage
         let componentLocation: string = '';
-        if (this.hasAttribute('src'))
-            componentLocation = this.getAttribute('src') as string;
+        this.hasAttribute('src') &&
+            (componentLocation = this.getAttribute('src') as string);
 
         // Read the component content from an html file
         fetch(componentLocation).then(content => content.text()).then(text => {
@@ -21,7 +21,11 @@ class CustomElement extends HTMLElement {
             // Replace theis customElement with the newlly created element
             // and fire an event to update the value binds
             this.replaceWith(innerContent)
-            document.dispatchEvent(new CustomEvent('custom-compo-build', { bubbles: true, detail: { text: () => componentLocation } }));
+            document.dispatchEvent(
+                new CustomEvent(
+                    'custom-compo-build',
+                    { bubbles: true, detail: { text: () => componentLocation } }
+                ));
         }).catch(e => {
             throw new Error(e.message || e);
         });
