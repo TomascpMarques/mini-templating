@@ -149,7 +149,6 @@ class App implements StateHolder, ValueBinder {
                 && x.tagName.toLowerCase() !== this.#customTags['template']
         );
 
-        console.log("-> Current src_id: " + src_id);
         regularTagListners.forEach(element => {
             console.log("Current Element: " + element.tagName);
             switch (element.tagName.toLowerCase()) {
@@ -218,7 +217,7 @@ class App implements StateHolder, ValueBinder {
         );
         // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-        // Update regular HTML elements state binded values + + +
+        // Update regular HTML elements state binded values  + + +
         this.valueUpdateStdHTMLElements(src_id);
         // + + + + + + + + + + + + + + + + + + + + + + + + + + + +
     };
