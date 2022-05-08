@@ -1,19 +1,23 @@
 # Mini Templating Syntax
 
-## Current Functional Features
+## The awsome features
 
 - Value binding;
 - State actions;
 - Action handeling;
 - Value updating
 
-## Create a new Mini App
+## Create a new project using *Mini*
 
 ### **Initial Mini Import**
 
-First just import the script file **right in the head section**
-of the document, this will allow you to use _Mini_ later in the body
+#### Raw mini.js file usage *(No NPM)*
+
+First thing is, to import the script file **right in the head section**
+of the document, this will allow you to use *Mini* later in the body
 section of the document.
+
+> Import Mini into the document.
 
 ```HTML
    <head>
@@ -23,14 +27,31 @@ section of the document.
    </head>
 ```
 
-> Import Mini into the document.
+#### Using the NPM package
+
+Here, you can add the package to your project by using NPM or Yarn, choose the tool you fancy most. So now you can run the following commands:
+
+##### NPM
+
+```bash
+npm i @sum_sum/mini-templating
+```
+
+##### Yarn
+
+```bash
+yarn add @sum_sum/mini-templating
+```
 
 ---
 
-Next, at the end section of the body section, declare the script
-secction or import you _Mini_ app file.
+### Mini usage - HTML
 
-In the body script section, create the a new mini app
+#### Using the app script in the HTML file
+
+Now, at the end section of the body tag, declare the script tag or import your *Mini* app js file.
+
+> In the body script section, create the a new mini app
 
 ```HTML
    <body>
@@ -39,7 +60,7 @@ In the body script section, create the a new mini app
        </main>
 
        <script>
-           const newApp = newMini(
+           window.app = mini.newMini(
             /**
              * The configs will be explained
              * in the next section.
@@ -49,24 +70,51 @@ In the body script section, create the a new mini app
    </body>
 ```
 
+#### Or, if you fancy using external javascript, you can do the following
+
+```html
+<body>
+       <main name='Mini App' id='app'>
+           <!-- Future Html markup -->
+       </main>
+
+       <script type="module" src="app.js>
+       </script>
+   </body>
+```
+
 > Define the basic makrup/script structure of the page.
+
+```javascript
+'use strict';
+
+import * as mini from "@sum_sum/mini-templating";
+
+window.app = mini.newMini(
+    /**
+    * The configs will be explained
+    * in the next section.
+    * bla, bla, bla...
+    */
+);
+```
 
 ---
 
-Now we will define the configurations for the new application.
-These configs hold the state of the application, it's entry point and the actions the app recognizes.
+Now, we will state the configurations for the new mini app.
+These configs hold the state of the application, it's entry point in the markup, and the actions that work with state, that the app recognizes.
 
 **Those configurations are:**
 | Name | Type | Example |
 | ----- | ------------------------ | --------------- |
-| entry | String - HTML Element ID | `'app'` or `'Mini'` |
+| entry | String - HTML Element ID | `'app'` or `'Mini'` or `'Apples, etc...'` |
 | store | Js Object - String/value pairs | `{ 'loggin': true }` |
-| actions | Js Object - String/(target-func) pairs | `{'logout': {'target': 'login}, 'do': (t) => {return !t}}` |
+| actions | Js Object - String/(target-func) pairs | `{'logout': {'target': 'login'}, 'do': (t) => return !t}` |
 | debug | Boolean | `true` or `false` |
 
 ### **Example cofiguration**
 
-### **Body tag app section**
+#### **Body tag app section**
 
 ```HTML
    <body>
@@ -80,10 +128,9 @@ These configs hold the state of the application, it's entry point and the action
                After pressing bt1: « The value is: 2. »
             -->
        </main>
-
        <script
          type="module"
-         src="js/app.js"
+         src="app.js"
         ></script>
    </body>
 ```
@@ -93,26 +140,39 @@ These configs hold the state of the application, it's entry point and the action
 ```JavaScript
     import * as mini from '@sum_sum/mini-templating';
 
-    window.app = mini.newMini(
-        'entry': 'app',
-        'store': {
-            'number': 1
+    window.app = mini.newMini({
+        entry: 'app',
+        store: {
+            state1: 1,
+            num1: 0,
+            num2: 0,
+            result: 0,
         },
-        'actions': {
-            'addOne' : {
-                'target': 'number1',
-                /*  The first parameter is app state
-                    The second parameter is the target  */
-                do: (_, t) => { return ++t }
+        actions: {
+            noStateNoTargetFunc: {
+                target: '_',
+                do: () => console.log('Something cool'),
             },
-            'logHello' : {
-                /* This action targets no state, and mutates no state */
-                'target': '_',
-                do: () => { console.log('Hello!) }
-            }
+            sumTwoNumbers: {
+                target: 'result',
+                do: (state, stateResult) => {
+                    const value1 = state.num1;
+                    const value2 = state.num2;
+                    console.log(`O valor da appState: ${app.store.result}`);
+                    stateResult = Number(value1) + Number(value2);
+                    return stateResult;
+                },
+            },
+            addOne: {
+                target: 'state1',
+                do: (_, targ) => {
+                    return ++targ;
+                },
+            },
+
         },
-        'debug': false,
-    );
+        debug: false,
+    });
 ```
 
 ---
@@ -121,29 +181,40 @@ These configs hold the state of the application, it's entry point and the action
 
 ### Intro
 
-Components in mini are **directly inserted to the DOM**, they also share
-the global app state. By sharing the state this way no bubblig of events
-or dispatching, and or passing state to/through parent components is needed.
+Components in mini are **directly inserted to the DOM**, replacing the **`<mini-component>`** tag was ocuppying, they also *share the global app state and its actions*. By sharing the state this way, no bubblig of events or dispatching, and or passing state to/through parent components, is needed.
 
 ### Component Creation
 
-The component in itself is just a container HTML tag, such as **div** or
-**section**. The html file is then read and inserted into the DOM.
+The component in itself is just a html file, containing a HTML tag at root level, such as **div** or **section**. The html file is then read and inserted into the DOM. The components can also incorporate style, wich is then turned global to the project.
 
 ### Component Example
 
 A simple component, that will work with the [previous example](#body-script-tag), will be the following.
 
 ```HTML
-<div>
-    <h2>Lorem, ipsum.</h2>
+<div >
+    <h2>Component</h2>
     <hr>
     <h4 id="sub_title">Lorem ipsum dolor sit amet consectetur.</h4>
-    <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        <mark>Commodi nostrum</mark> , illo fuga repudiandae.
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <mark>Commodi nostrum</mark> , illo fuga repudiandae provident non mollitia voluptatum corporis adipisci in voluptate labore. Ab totam placeat quos cumque molestiae ipsa repudiandae.
     </p>
-    <q id="sss" @bind>Some state change {{@state1}}</q>
+    <q @bind>Some {{@state1}}</q>
+    <button onclick="app.handle('addOne')">Press Me</button>
+</div>
+```
+
+One other component example is:
+
+```HTML
+<div >
+    <h2>Component</h2>
+    <hr>
+    <h4 id="sub_title">Lorem ipsum dolor sit amet consectetur.</h4>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <mark>Commodi nostrum</mark> , illo fuga repudiandae provident non mollitia voluptatum corporis adipisci in voluptate labore. Ab totam placeat quos cumque molestiae ipsa repudiandae.
+    </p>
+    <q @bind>Some {{@state1}}</q>
     <button onclick="app.handle('addOne')">Press Me</button>
 </div>
 ```
@@ -154,4 +225,4 @@ The component inclusion in the main HTML file is as follows:
 <mini-component src="./component.html"> </mini-component>
 ```
 
-The component (_achieved with JS's [customElement](https://developer.mozilla.org/en-US/docs/Web/API/Window/customElements))_ will handle the creation of content, emitting an event that will assure all state listeners are accounted for.
+The component (*achieved with JS's [customElement](https://developer.mozilla.org/en-US/docs/Web/API/Window/customElements))* will handle the creation of content, emitting an event that will assure all state listeners are all accounted for.
