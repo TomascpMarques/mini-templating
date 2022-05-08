@@ -14,8 +14,12 @@ window.app = mini.newMini({
     actions: {
         removeComponent: {
             target: '_',
-            do: () => document.getElementById('22')
-                .replaceWith(),
+            do: async() => {
+                let x = await mini.getComponentContent('./component.html');
+                document.getElementById('22')
+                    .parentNode.replaceWith(x.compo);
+                document.dispatchEvent(x.event);
+            },
         },
         ss: {
             target: '_',
@@ -52,7 +56,8 @@ window.app = mini.newMini({
         spaceOutLetters: {
             target: 'state3',
             do: (_, targ) => {
-                targ = 'Good Bye';
+                targ = targ.split('')
+                    .join(' ');
                 return targ;
             },
         },

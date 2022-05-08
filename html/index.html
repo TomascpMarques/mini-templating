@@ -10,7 +10,7 @@
 
 <body>
     <main id="app" name="application">
-        <mini-component id="22" src="./component.html"> </mini-component>
+        <mini-component id="22" src="./compo.html"> </mini-component>
         <br>
         <button onclick="app.handle('removeComponent')">
             Remove component
@@ -23,7 +23,7 @@
         </button>
         <button id="bt3" onclick="app.handle('2x')">Multiply by 2</button>
         <button id="bt4" onclick="app.handle('docWrite')">Write in doc</button>
-        <p id="p1" @bind>Here {{@state1}}</p>
+        <p @bind>Here {{@state1}}</p>
         <!--
             This technique will proably work with all input types
             as long the binded state is appropriate to the input type.
