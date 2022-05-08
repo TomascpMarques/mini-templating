@@ -10,8 +10,12 @@
 
 <body>
     <main id="app" name="application">
-        <mini-component src="./component.html"> </mini-component>
-        <br> <br>
+        <mini-component id="22" src="./component.html"> </mini-component>
+        <br>
+        <button onclick="app.handle('removeComponent')">
+            Remove component
+        </button>
+        <br>
         <q @bind>{{@state1}}</q>
         <button id="bt1" onclick="app.handle('addOne')">Add 1</button>
         <button id="bt2" onclick="app.handle('spaceOutLetters')">

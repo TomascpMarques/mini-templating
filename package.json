@@ -15,9 +15,9 @@
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
         "minify": "minify dist/**.js > src/mini.js",
-        "prepublish": "yarn build; yarn minify",
+        "prepublish": "yarn build && yarn minify",
         "clean": "rm -rf dist/**",
-        "reset": "rm -rf dist/**; rm -rf src/**"
+        "reset": "rm -rf dist/** && rm -rf src/**"
     },
     "repository": {
         "type": "git",

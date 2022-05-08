@@ -12,6 +12,11 @@ window.app = mini.newMini({
         result: 0,
     },
     actions: {
+        removeComponent: {
+            target: '_',
+            do: () => document.getElementById('22')
+                .replaceWith(),
+        },
         ss: {
             target: '_',
             do: () => console.log('Something cool'),
