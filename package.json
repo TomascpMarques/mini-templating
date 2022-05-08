@@ -8,14 +8,14 @@
     },
     "dependencies": {},
     "name": "@sum_sum/mini-templating",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "A simple templating/reactive-elements helper for low code web pages",
     "main": "/src/mini.js",
     "scripts": {
         "build": "npx tsc",
         "watch": "npx tsc --pretty --watch",
-        "minify": "minify dist/**.js > src/mini.js",
-        "prepublish": "yarn build && yarn minify",
+        "minify": "minify dist/*.js > src/mini.js",
+        "prepublish": "yarn reset && yarn build && yarn minify",
         "clean": "rm -rf dist/**",
         "reset": "rm -rf dist/** && rm -rf src/**"
     },
