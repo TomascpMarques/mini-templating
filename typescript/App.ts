@@ -1,3 +1,5 @@
+
+
 class App implements StateHolder, ValueBinder {
     // Class development and debugging values
     readonly binderAtributte: string = '@bind';
@@ -17,10 +19,12 @@ class App implements StateHolder, ValueBinder {
     constructor(config: ApplicationSetupConfigs) {
         this.#debugging = config.debug;
 
-        document.addEventListener('custom-compo-build', () => {
+        document.addEventListener('custom-compo-build', (p) => {
+            console.log("->", p);
+            console.log("HERE");
             this.setupBindedValues();
             this.setUpOnChangeEventForValuedElements();
-        }, false);
+        }, true);
 
         let temp: string | undefined = document.getElementById(config.entry)?.id;
 
@@ -42,7 +46,6 @@ class App implements StateHolder, ValueBinder {
 
         // TODO Batch DOM Changes
 
-        // TESTING mini-basic tag
         // DEVELOPING Mini custom tags
         customElements.define('mini-basic', Mini);
         customElements.define('mini-var', MiniTemplate);
@@ -269,6 +272,7 @@ class App implements StateHolder, ValueBinder {
      * a on-call fashion, instead of periodically updating the application
      */
     private setupBindedValues = () => {
+        console.log("I WAS CALLED IN")
         if (this.#debugging)
             miniCustomMessage(
                 'mini-debug',
@@ -291,11 +295,9 @@ class App implements StateHolder, ValueBinder {
             element => element.hasAttribute(this.binderAtributte)
         )
 
-
-
         // Changin the template text for the proper mini-<tag>
         bindedElements.forEach(binded => {
-            const template = this.#customTags['template'];
+            const template = this.#customTags.template;
 
             const bindedValues = (binded.textContent as string).match(/{{@\w+}}/gm);
             if (typeof bindedValues === 'undefined') {
