@@ -138,7 +138,8 @@ These configs hold the state of the application, it's entry point in the markup,
 #### **Body script tag**
 
 ```JavaScript
-    import * as mini from '@sum_sum/mini-templating';
+    import * as mini from
+        "./node_modules/@sum_sum/mini-templating/src/mini.js";
 
     window.app = mini.newMini({
         entry: 'app',
