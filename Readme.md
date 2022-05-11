@@ -1,9 +1,13 @@
 # Mini Templating
 
-## What does this do?
+## What can Mini do?
 
 Provide a way to emulate a reactive/template based js-framework experience,
 in a similar but more reduced and simplified manner.
+
+## NPM page
+
+[@sum_sum/mini-templating](https://www.npmjs.com/package/@sum_sum/mini-templating)
 
 ## Syntax & Usage helper
 
